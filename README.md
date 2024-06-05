@@ -18,12 +18,16 @@ L'objectif de ce repository est double :
 EmileInnovationHub
 ├── Prototypes
 │   └── README.md
+│
 ├── JavaProjects
 │   └── README.md
+│
 ├── PythonProjects
 │   └── README.md
+│
 ├── CoursEtNotes
 │   └── README.md
+│
 └── GLPI
     └── README.md
 
