@@ -1,0 +1,232 @@
+/* Style du corps de la page / Page body style */
+body {
+    font-family: Arial, sans-serif; /* Police de caractères / Font family */
+    background-color: #d4f1c5; /* Couleur de fond / Background color */
+    margin: 0; /* Marge / Margin */
+    padding: 0; /* Rembourrage / Padding */
+    overflow-x: hidden; /* Désactiver le défilement horizontal / Disable horizontal scrolling */
+    animation: backgroundAnimation 10s infinite; /* Animation de changement de couleur de fond / Background color change animation */
+}
+
+/* Style du conteneur principal / Main container style */
+.container {
+    width: 90%; /* Largeur / Width */
+    margin: 0 auto; /* Centrer horizontalement / Center horizontally */
+    padding: 20px; /* Rembourrage / Padding */
+}
+
+/* Style de l'en-tête / Header style */
+header {
+    display: flex; /* Affichage flexible / Flexible display */
+    justify-content: space-between; /* Espacement entre les éléments / Space between elements */
+    align-items: center; /* Alignement des éléments / Align items */
+    position: relative; /* Position relative / Relative position */
+}
+
+/* Style du nom et prénom / Name and surname style */
+.nom-prenom {
+    font-size: 2.5em; /* Taille de la police / Font size */
+    margin: 0; /* Marge / Margin */
+    color: #333; /* Couleur de la police / Font color */
+    transition: transform 0.3s ease; /* Transition pour l'agrandissement / Transition for enlargement */
+}
+
+/* Agrandissement du nom et prénom au survol / Enlarge name and surname on hover */
+.nom-prenom:hover {
+    transform: scale(1.2); /* Échelle / Scale */
+}
+
+/* Style du message provisoire / Temporary message style */
+.message-provisoire {
+    color: #ff4500; /* Couleur de la police / Font color */
+    font-size: 1.2em; /* Taille de la police / Font size */
+    position: absolute; /* Position absolue / Absolute position */
+    top: 0; /* Position verticale / Vertical position */
+    left: 50%; /* Position horizontale / Horizontal position */
+    transform: translateX(-50%); /* Centrer horizontalement / Center horizontally */
+    animation: wave 1.5s infinite; /* Animation de vague / Wave animation */
+}
+
+/* Style des informations de contact / Contact information style */
+.contact-info {
+    position: fixed; /* Position fixe / Fixed position */
+    top: 10px; /* Position verticale / Vertical position */
+    right: 10px; /* Position horizontale / Horizontal position */
+    background-color: rgba(255, 255, 255, 0.8); /* Couleur de fond / Background color */
+    padding: 10px; /* Rembourrage / Padding */
+    border-radius: 5px; /* Bordures arrondies / Rounded borders */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre / Shadow */
+}
+
+/* Animation de vague pour le message provisoire / Wave animation for temporary message */
+@keyframes wave {
+    0%, 100% { color: #ff4500; } /* Couleur de départ et de fin / Start and end color */
+    50% { color: #ff6347; } /* Couleur intermédiaire / Intermediate color */
+}
+
+/* Style des liens / Links style */
+.rectangle-liens {
+    display: flex; /* Affichage flexible / Flexible display */
+    flex-wrap: wrap; /* Envelopper les éléments / Wrap elements */
+    gap: 10px; /* Espace entre les éléments / Space between elements */
+    margin-top: 20px; /* Marge supérieure / Top margin */
+}
+
+/* Style des liens individuels / Individual link style */
+.lien {
+    background-color: #fff; /* Couleur de fond / Background color */
+    padding: 10px 20px; /* Rembourrage / Padding */
+    border-radius: 5px; /* Bordures arrondies / Rounded borders */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre / Shadow */
+    transition: all 0.3s ease; /* Transition pour le survol / Hover transition */
+    text-decoration: none; /* Suppression de la décoration de texte / Remove text decoration */
+    color: #333; /* Couleur de la police / Font color */
+}
+
+/* Effet de survol pour les liens / Hover effect for links */
+.lien:hover {
+    background-color: #4caf50; /* Couleur de fond au survol / Background color on hover */
+    color: #fff; /* Couleur de la police au survol / Font color on hover */
+    transform: scale(1.05); /* Échelle au survol / Scale on hover */
+    color: #0f056b; /* Couleur de la police / Font color */
+}
+/* Style des sections bio, expérience, et diplômes / Style for bio, experience, and diplomas sections */
+.bio, .experience, .diplomes {
+    margin-top: 40px; /* Marge supérieure / Top margin */
+}
+
+/* Style des rectangles bio, expérience, et diplômes / Style for bio, experience, and diplomas rectangles */
+.rectangle-bio, .rectangle-experience, .rectangle-diplomes {
+    background-color: #fff; /* Couleur de fond / Background color */
+    padding: 20px; /* Rembourrage / Padding */
+    border-radius: 10px; /* Bordures arrondies / Rounded borders */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre / Shadow */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transition pour le survol / Hover transition */
+}
+
+/* Effet de survol pour les rectangles bio, expérience, et diplômes / Hover effect for bio, experience, and diplomas rectangles */
+.rectangle-experience:hover, .rectangle-diplomes:hover {
+    background-color: #000; /* Couleur de fond au survol / Background color on hover */
+    color: #fff; /* Couleur de la police au survol / Font color on hover */
+}
+
+/* Effet de survol pour les titres, paragraphes et éléments de liste des sections expérience et diplômes / Hover effect for titles, paragraphs and list items in experience and diplomas sections */
+.rectangle-experience:hover h2, .rectangle-experience:hover p, .rectangle-experience:hover li, 
+.rectangle-diplomes:hover h2, .rectangle-diplomes:hover p, .rectangle-diplomes:hover li {
+    color: #fff; /* Couleur de la police au survol / Font color on hover */
+}
+
+/* Style des titres des sections bio, expérience, et diplômes / Style for bio, experience, and diplomas section titles */
+.bio h2, .experience h2, .diplomes h2 {
+    font-size: 1.8em; /* Taille de la police / Font size */
+    color: #333; /* Couleur de la police / Font color */
+    transition: color 0.3s ease; /* Transition pour le survol / Hover transition */
+}
+
+/* Style des paragraphes des sections bio, expérience, et diplômes / Style for bio, experience, and diplomas section paragraphs */
+.bio p, .experience p, .diplomes p {
+    font-size: 1.1em; /* Taille de la police / Font size */
+    color: #333; /* Couleur de la police / Font color */
+}
+
+/* Style des listes d'expérience et de diplômes / Style for experience and diplomas lists */
+.experience ul, .diplomes ul {
+    list-style-type: none; /* Suppression des puces / Remove bullets */
+    padding: 0; /* Rembourrage / Padding */
+}
+
+/* Style des éléments de liste d'expérience et de diplômes / Style for experience and diplomas list items */
+.experience li, .diplomes li {
+    margin-bottom: 20px; /* Marge inférieure / Bottom margin */
+}
+
+/* Style des titres des éléments de liste d'expérience et de diplômes / Style for experience and diplomas list item titles */
+.experience h3, .diplomes h3 {
+    font-size: 1.2em; /* Taille de la police / Font size */
+    display: flex; /* Affichage flexible / Flexible display */
+    justify-content: space-between; /* Espacement entre les éléments / Space between elements */
+    align-items: center; /* Alignement des éléments / Align items */
+    color: #333; /* Couleur de la police / Font color */
+}
+
+/* Effet de survol pour les titres des éléments de liste d'expérience et de diplômes / Hover effect for experience and diplomas list item titles */
+.rectangle-experience:hover h3, .rectangle-diplomes:hover h3 {
+    color: #fff; /* Couleur de la police au survol / Font color on hover */
+}
+
+/* Style des années d'expérience / Style for years of experience */
+.annees {
+    font-weight: bold; /* Gras / Bold */
+}
+
+/* Style du pied de page / Footer style */
+footer {
+    margin-top: 40px; /* Marge supérieure / Top margin */
+}
+
+/* Style des hobbies / Hobbies style */
+.hobbies {
+    display: flex; /* Affichage flexible / Flexible display */
+    gap: 20px; /* Espace entre les éléments / Space between elements */
+}
+
+/* Style des éléments de hobby / Hobby item style */
+.hobby {
+    display: flex; /* Affichage flexible / Flexible display */
+    align-items: center; /* Alignement des éléments / Align items */
+    gap: 10px; /* Espace entre les éléments / Space between elements */
+    background-color: #fff; /* Couleur de fond / Background color */
+    padding: 10px; /* Rembourrage / Padding */
+    border-radius: 5px; /* Bordures arrondies / Rounded borders */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre / Shadow */
+    transition: all 0.3s ease; /* Transition pour le survol / Hover transition */
+}
+
+/* Effet de survol pour les éléments de hobby / Hover effect for hobby items */
+.hobby:hover {
+    background-color: #4caf50; /* Couleur de fond au survol / Background color on hover */
+    color: #fff; /* Couleur de la police au survol / Font color on hover */
+}
+
+/* Style des images de hobby / Hobby image style */
+.hobby img {
+    width: 50px; /* Largeur / Width */
+    height: 50px; /* Hauteur / Height */
+}
+
+/* Style des paragraphes de hobby / Hobby paragraph style */
+.hobby p {
+    font-size: 1em; /* Taille de la police / Font size */
+    color: #333; /* Couleur de la police / Font color */
+}
+
+/* Style des mentions légales / Legal mentions style */
+.mentions-legales {
+    margin-top: 20px; /* Marge supérieure / Top margin */
+    font-size: 0.9em; /* Taille de la police / Font size */
+    color: #666; /* Couleur de la police / Font color */
+    text-align: center; /* Alignement centré / Center alignment */
+}
+
+/* Animation de changement de couleur de fond / Background color change animation */
+@keyframes backgroundAnimation {
+    0% { background-color: #d4f1c5; } /* Couleur de départ / Start color */
+    50% { background-color: #c0e8a9; } /* Couleur intermédiaire / Intermediate color */
+    100% { background-color: #d4f1c5; } /* Couleur de fin / End color */
+}
+
+body {
+    animation: backgroundAnimation 10s infinite; /* Animation de changement de couleur de fond / Background color change animation */
+}
+
+
+/* Animation de changement de couleur de fond / Background color change animation */
+@keyframes backgroundAnimation {
+    0% { background-color: #d4f1c5; } /* Couleur de départ / Start color */
+    50% { background-color: #c0e8a9; } /* Couleur intermédiaire / Intermediate color */
+    100% { background-color: #d4f1c5; } /* Couleur de fin / End color */
+}
+
+body {
+    animation: backgroundAnimation 10s infinite; /* Animation de changement de couleur de fond / Background color change animation */
+}
