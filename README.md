@@ -15,21 +15,21 @@ L'objectif de ce repository est double :
 
 ## 📚 Ce que vous trouverez ici
 ``
-`EmileInnovationHub
-`├── Prototypes
-`│   └── README.md
-`│
-`├── JavaProjects
-`│   └── README.md
-`│
-`├── PythonProjects
-`│   └── README.md
-`│
-`├── CoursEtNotes
-`│   └── README.md
-`│
-`└── GLPI
-`    └── README.md
+EmileInnovationHub
+ ├── Prototypes 
+ │   └── README.md  
+ │ 
+ ├── JavaProjects 
+ │   └── README.md 
+ │ 
+ ├── PythonProjects 
+ │   └── README.md 
+ │ 
+ ├── CoursEtNotes 
+ │   └── README.md 
+ │ 
+ └── GLPI 
+     └── README.md 
 ``
 
 ### 🔹 Prototypes de sites web
