@@ -15,6 +15,19 @@ L'objectif de ce repository est double :
 
 ## 📚 Ce que vous trouverez ici
 
+EmileInnovationHub/
+├── Prototypes/
+│   └── README.md
+├── JavaProjects/
+│   └── README.md
+├── PythonProjects/
+│   └── README.md
+├── CoursEtNotes/
+│   └── README.md
+└── GLPI/
+    └── README.md
+
+
 ### 🔹 Prototypes de sites web
 Des exemples de structures de sites web basiques, prêts à être utilisés ou modifiés selon vos besoins. Ces prototypes sont idéaux pour ceux qui veulent se lancer dans la création de sites web par eux-mêmes.
 
