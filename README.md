@@ -4,7 +4,8 @@ Bien sûr, voici une version améliorée avec plus de mise en page, des tableaux
 
 # 🌟 Bienvenue sur **EmileInnovationHub** ! 🌟
 
-Ce repository est dédié à la présentation de mon travail en tant que développeur et passionné de technologie. Vous y trouverez un portfolio de mes projets, ainsi que des ressources et des connaissances que je souhaite partager gratuitement avec la communauté.
+Ce repository est dédié à la présentation de mon travail en tant que développeur et passionné de technologie. 
+Vous y trouverez un portfolio de mes projets, ainsi que des ressources et des connaissances que je souhaite partager gratuitement avec la communauté.
 
 ## 🚀 À propos d'EmileInnovationHub
 
