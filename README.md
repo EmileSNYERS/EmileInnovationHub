@@ -26,6 +26,7 @@ Des cours et des notes détaillés pour vous aider à comprendre divers concepts
 
 ### 🔹 Tutoriels et guides
 Des explications détaillées et des tutoriels pour vous aider à comprendre et utiliser les ressources mises à disposition.
+[attention ceci est en cours de construction](https://www.emilesnyersipi.ovh/)
 
 ### 🔹 Projets de programmation
 Un aperçu de mes projets personnels et professionnels, avec du code source disponible pour exploration et apprentissage.
