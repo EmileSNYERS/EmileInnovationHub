@@ -14,7 +14,7 @@ L'objectif de ce repository est double :
 2. **Partage de ressources** : Je mets à disposition des exemples de sites internet, des programmes en Java et Python, ainsi que des cours et des notes pour aider ceux qui souhaitent apprendre et créer par eux-mêmes.
 
 ## 📚 Ce que vous trouverez ici
-
+``
 EmileInnovationHub
 ├── Prototypes
 │   └── README.md
@@ -30,7 +30,7 @@ EmileInnovationHub
 │
 └── GLPI
     └── README.md
-
+``
 
 ### 🔹 Prototypes de sites web
 Des exemples de structures de sites web basiques, prêts à être utilisés ou modifiés selon vos besoins. Ces prototypes sont idéaux pour ceux qui veulent se lancer dans la création de sites web par eux-mêmes.
