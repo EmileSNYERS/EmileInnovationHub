@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Développeur - Hub de Ressources</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Navigation par onglets */
+        .tabs-container {
+            margin-bottom: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-button {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Contenu des sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .category-header:hover {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-icon {
+            font-size: 1.8rem;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .category.expanded .category-content {
+            max-height: 2000px;
+        }
+
+        .category.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .subcategory {
+            border-left: 4px solid #3498db;
+            margin: 20px 30px;
+            padding-left: 20px;
+        }
+
+        .subcategory-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .project-btn {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 15px;
+            text-decoration: none;
+            color: #495057;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-btn:hover {
+            transform: translateY(-3px);
+            border-color: #007bff;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.2);
+            color: #007bff;
+        }
+
+        .project-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .project-btn:hover::before {
+            left: 100%;
+        }
+
+        .project-icon {
+            font-size: 1.5rem;
+            min-width: 24px;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .project-desc {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            line-height: 1.3;
+        }
+
+        /* Styles spéciaux pour différents types de projets */
+        .project-btn.html { border-color: #e34c26; }
+        .project-btn.html:hover { border-color: #e34c26; color: #e34c26; }
+
+        .project-btn.css { border-color: #1572b6; }
+        .project-btn.css:hover { border-color: #1572b6; color: #1572b6; }
+
+        .project-btn.js { border-color: #f7df1e; }
+        .project-btn.js:hover { border-color: #f7df1e; color: #f39c12; }
+
+        .project-btn.react { border-color: #61dafb; }
+        .project-btn.react:hover { border-color: #61dafb; color: #61dafb; }
+
+        .project-btn.tool { border-color: #6f42c1; }
+        .project-btn.tool:hover { border-color: #6f42c1; color: #6f42c1; }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Effet de recherche */
+        .search-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 500px;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            outline: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .tabs-container { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🚀 Hub de Développement</h1>
+            <p class="subtitle">
+                Explorez ma collection organisée de projets, snippets, outils et ressources. 
+                Chaque élément est soigneusement catégorisé pour faciliter votre navigation et apprentissage.
+            </p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="🔍 Rechercher un projet, outil ou ressource..." id="searchInput">
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-button active" data-tab="html-css">🎨 HTML/CSS</button>
+            <button class="tab-button" data-tab="javascript">⚡ JavaScript</button>
+            <button class="tab-button" data-tab="frameworks">🔧 Frameworks</button>
+            <button class="tab-button" data-tab="tools">🛠️ Outils</button>
+            <button class="tab-button" data-tab="snippets">📋 Snippets</button>
+            <button class="tab-button" data-tab="resources">📚 Ressources</button>
+        </div>
+
+        <!-- Section HTML/CSS -->
+        <div class="section active" id="html-css">
+            <div class="category expanded">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">🏗️</span>
+                        Structure HTML
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="subcategory">
+                        <div class="subcategory-title">📊 Tableaux</div>
+                        <div class="projects-grid">
+                            <a href="/html/tableaux/tableau-simple.html" class="project-btn html">
+                                <span class="project-icon">📋</span>
+                                <div class="project-info">
+                                    <div class="project-name">Tableau Simple</div>
+                                    <div class="project-desc">Création d'un tableau HTML basique</div>
+                                </div>
+                            </a>
+                            <a href="/html/tableaux/tableau-responsive.html" class="project-btn html">
+                                <span class="project-icon">📱</span>
+                                <div class="project-info">
+                                    <div class="project-name">Tableau Responsive</div>
+                                    <div class="project-desc">Tableau adaptatif pour mobiles</div>
+                                </div>
+                            </a>
+                            <a href="/html/tableaux/tableau-stylise.html" class="project-btn html">
+                                <span class="project-icon">🎨</span>
+                                <div class="project-info">
+                                    <div class="project-name">Tableau Stylisé</div>
+                                    <div class="project-desc">Tableau avec styles CSS avancés</div>
+                                </div>
+                            </a>
+                            <a href="/html/tableaux/tableau-interactif.html" class="project-btn html">
+                                <span class="project-icon">⚡</span>
+                                <div class="project-info">
+                                    <div class="project-name">Tableau Interactif</div>
+                                    <div class="project-desc">Tri, filtres et pagination</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="subcategory">
+                        <div class="subcategory-title">📝 Listes</div>
+                        <div class="projects-grid">
+                            <a href="/html/listes/liste-ordonnee.html" class="project-btn html">
+                                <span class="project-icon">🔢</span>
+                                <div class="project-info">
+                                    <div class="project-name">Liste Ordonnée</div>
+                                    <div class="project-desc">Listes numérotées personnalisées</div>
+                                </div>
+                            </a>
+                            <a href="/html/listes/liste-puces.html" class="project-btn html">
+                                <span class="project-icon">•</span>
+                                <div class="project-info">
+                                    <div class="project-name">Liste à Puces</div>
+                                    <div class="project-desc">Puces personnalisées avec CSS</div>
+                                </div>
+                            </a>
+                            <a href="/html/listes/liste-navigation.html" class="project-btn html">
+                                <span class="project-icon">🧭</span>
+                                <div class="project-info">
+                                    <div class="project-name">Menu Navigation</div>
+                                    <div class="project-desc">Menu avec sous-menus déroulants</div>
+                                </div>
+                            </a>
+                            <a href="/html/listes/liste-accordeon.html" class="project-btn html">
+                                <span class="project-icon">📁</span>
+                                <div class="project-info">
+                                    <div class="project-name">Liste Accordéon</div>
+                                    <div class="project-desc">Liste collapsible interactive</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="subcategory">
+                        <div class="subcategory-title">📝 Formulaires</div>
+                        <div class="projects-grid">
+                            <a href="/html/formulaires/form-contact.html" class="project-btn html">
+                                <span class="project-icon">📧</span>
+                                <div class="project-info">
+                                    <div class="project-name">Formulaire Contact</div>
+                                    <div class="project-desc">Formulaire de contact stylisé</div>
+                                </div>
+                            </a>
+                            <a href="/html/formulaires/form-validation.html" class="project-btn html">
+                                <span class="project-icon">✅</span>
+                                <div class="project-info">
+                                    <div class="project-name">Validation HTML5</div>
+                                    <div class="project-desc">Validation native des champs</div>
+                                </div>
+                            </a>
+                            <a href="/html/formulaires/form-custom.html" class="project-btn html">
+                                <span class="project-icon">🎛️</span>
+                                <div class="project-info">
+                                    <div class="project-name">Inputs Personnalisés</div>
+                                    <div class="project-desc">Styles custom pour inputs</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">🎨</span>
+                        Styles CSS
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="subcategory">
+                        <div class="subcategory-title">🎪 Animations</div>
+                        <div class="projects-grid">
+                            <a href="/css/animations/bounce.html" class="project-btn css">
+                                <span class="project-icon">🏀</span>
+                                <div class="project-info">
+                                    <div class="project-name">Effet Bounce</div>
+                                    <div class="project-desc">Animation de rebond CSS</div>
+                                </div>
+                            </a>
+                            <a href="/css/animations/fade.html" class="project-btn css">
+                                <span class="project-icon">👻</span>
+                                <div class="project-info">
+                                    <div class="project-name">Fade In/Out</div>
+                                    <div class="project-desc">Effets d'apparition/disparition</div>
+                                </div>
+                            </a>
+                            <a href="/css/animations/loading.html" class="project-btn css">
+                                <span class="project-icon">⏳</span>
+                                <div class="project-info">
+                                    <div class="project-name">Spinners Loading</div>
+                                    <div class="project-desc">Collection d'animations de chargement</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="subcategory">
+                        <div class="subcategory-title">🔘 Boutons</div>
+                        <div class="projects-grid">
+                            <a href="/css/boutons/boutons-modernes.html" class="project-btn css">
+                                <span class="project-icon">🔴</span>
+                                <div class="project-info">
+                                    <div class="project-name">Boutons Modernes</div>
+                                    <div class="project-desc">Collection de boutons tendance</div>
+                                </div>
+                            </a>
+                            <a href="/css/boutons/boutons-3d.html" class="project-btn css">
+                                <span class="project-icon">📦</span>
+                                <div class="project-info">
+                                    <div class="project-name">Boutons 3D</div>
+                                    <div class="project-desc">Effets de profondeur et ombres</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section JavaScript -->
+        <div class="section" id="javascript">
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">🎮</span>
+                        Interaction DOM
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="subcategory">
+                        <div class="subcategory-title">🎯 Événements</div>
+                        <div class="projects-grid">
+                            <a href="/js/events/click-counter.html" class="project-btn js">
+                                <span class="project-icon">👆</span>
+                                <div class="project-info">
+                                    <div class="project-name">Compteur de Clics</div>
+                                    <div class="project-desc">Gestion des événements click</div>
+                                </div>
+                            </a>
+                            <a href="/js/events/drag-drop.html" class="project-btn js">
+                                <span class="project-icon">🤏</span>
+                                <div class="project-info">
+                                    <div class="project-name">Drag & Drop</div>
+                                    <div class="project-desc">Interface glisser-déposer</div>
+                                </div>
+                            </a>
+                            <a href="/js/events/keyboard.html" class="project-btn js">
+                                <span class="project-icon">⌨️</span>
+                                <div class="project-info">
+                                    <div class="project-name">Raccourcis Clavier</div>
+                                    <div class="project-desc">Gestion des événements clavier</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="subcategory">
+                        <div class="subcategory-title">🎲 Mini Jeux</div>
+                        <div class="projects-grid">
+                            <a href="/js/jeux/tic-tac-toe.html" class="project-btn js">
+                                <span class="project-icon">❌⭕</span>
+                                <div class="project-info">
+                                    <div class="project-name">Tic Tac Toe</div>
+                                    <div class="project-desc">Jeu classique en JavaScript</div>
+                                </div>
+                            </a>
+                            <a href="/js/jeux/memory.html" class="project-btn js">
+                                <span class="project-icon">🧠</span>
+                                <div class="project-info">
+                                    <div class="project-name">Jeu Memory</div>
+                                    <div class="project-desc">Jeu de mémoire avec cartes</div>
+                                </div>
+                            </a>
+                            <a href="/js/jeux/snake.html" class="project-btn js">
+                                <span class="project-icon">🐍</span>
+                                <div class="project-info">
+                                    <div class="project-name">Snake Game</div>
+                                    <div class="project-desc">Jeu du serpent avec Canvas</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">🔧</span>
+                        Utilitaires JS
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="subcategory">
+                        <div class="subcategory-title">📊 Calculateurs</div>
+                        <div class="projects-grid">
+                            <a href="/js/utils/calculatrice.html" class="project-btn js">
+                                <span class="project-icon">🧮</span>
+                                <div class="project-info">
+                                    <div class="project-name">Calculatrice</div>
+                                    <div class="project-desc">Calculatrice complète</div>
+                                </div>
+                            </a>
+                            <a href="/js/utils/convertisseur.html" class="project-btn js">
+                                <span class="project-icon">🔄</span>
+                                <div class="project-info">
+                                    <div class="project-name">Convertisseur</div>
+                                    <div class="project-desc">Conversion d'unités</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Frameworks -->
+        <div class="section" id="frameworks">
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">⚛️</span>
+                        React
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="subcategory">
+                        <div class="subcategory-title">🧩 Composants</div>
+                        <div class="projects-grid">
+                            <a href="/react/components/todo-list.html" class="project-btn react">
+                                <span class="project-icon">✅</span>
+                                <div class="project-info">
+                                    <div class="project-name">Todo List</div>
+                                    <div class="project-desc">Gestionnaire de tâches React</div>
+                                </div>
+                            </a>
+                            <a href="/react/components/modal.html" class="project-btn react">
+                                <span class="project-icon">🪟</span>
+                                <div class="project-info">
+                                    <div class="project-name">Modal React</div>
+                                    <div class="project-desc">Composant modal réutilisable</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Outils -->
+        <div class="section" id="tools">
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">🎨</span>
+                        Générateurs CSS
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="projects-grid">
+                        <a href="/tools/gradient-generator.html" class="project-btn tool">
+                            <span class="project-icon">🌈</span>
+                            <div class="project-info">
+                                <div class="project-name">Générateur Dégradés</div>
+                                <div class="project-desc">Créateur de dégradés CSS</div>
+                            </div>
+                        </a>
+                        <a href="/tools/shadow-generator.html" class="project-btn tool">
+                            <span class="project-icon">👤</span>
+                            <div class="project-info">
+                                <div class="project-name">Générateur Ombres</div>
+                                <div class="project-desc">Box-shadow generator</div>
+                            </div>
+                        </a>
+                        <a href="/tools/color-palette.html" class="project-btn tool">
+                            <span class="project-icon">🎨</span>
+                            <div class="project-info">
+                                <div class="project-name">Palette Couleurs</div>
+                                <div class="project-desc">Générateur de palettes</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Snippets -->
+        <div class="section" id="snippets">
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">📋</span>
+                        Code Snippets
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="projects-grid">
+                        <a href="/snippets/responsive-grid.html" class="project-btn css">
+                            <span class="project-icon">⚏</span>
+                            <div class="project-info">
+                                <div class="project-name">Grid Responsive</div>
+                                <div class="project-desc">CSS Grid layout adaptatif</div>
+                            </div>
+                        </a>
+                        <a href="/snippets/flexbox-center.html" class="project-btn css">
+                            <span class="project-icon">📐</span>
+                            <div class="project-info">
+                                <div class="project-name">Centrage Flexbox</div>
+                                <div class="project-desc">Techniques de centrage</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Ressources -->
+        <div class="section" id="resources">
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span class="category-icon">📚</span>
+                        Documentation
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="projects-grid">
+                        <a href="/resources/cheat-sheet-css.html" class="project-btn css">
+                            <span class="project-icon">📋</span>
+                            <div class="project-info">
+                                <div class="project-name">Cheat Sheet CSS</div>
+                                <div class="project-desc">Référence rapide CSS</div>
+                            </div>
+                        </a>
+                        <a href="/resources/cheat-sheet-js.html" class="project-btn js">
+                            <span class="project-icon">📝</span>
+                            <div class="project-info">
+                                <div class="project-name">Cheat Sheet JS</div>
+                                <div class="project-desc">Référence rapide JavaScript</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion des onglets
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Retirer la classe active de tous les onglets
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                
+                // Ajouter la classe active à l'onglet cliqué
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Fonction pour basculer les catégories
+        function toggleCategory(header) {
+            const category = header.parentElement;
+            category.classList.toggle('expanded');
+        }
+
+        // Fonction de recherche
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const projectButtons = document.querySelectorAll('.project-btn');
+            
+            projectButtons.forEach(btn => {
+                const projectName = btn.querySelector('.project-name').textContent.toLowerCase();
+                const projectDesc = btn.querySelector('.project-desc').textContent.toLowerCase();
+                
+                if (projectName.includes(searchTerm) || projectDesc.includes(searchTerm)) {
+                    btn.style.display = 'flex';
+                    // Ouvrir automatiquement la catégorie contenant le résultat
+                    const category = btn.closest('.category');
+                    if (category && searchTerm.length > 2) {
+                        category.classList.add('expanded');
+                    }
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+
+            // Si la recherche est vide, remettre l'affichage normal
+            if (searchTerm === '') {
+                projectButtons.forEach(btn => {
+                    btn.style.display = 'flex';
+                });
+            }
+        });
+
+        // Animation d'entrée des éléments
+        function animateElements() {
+            const elements = document.querySelectorAll('.project-btn');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        }
+
+        // Compteur de projets par catégorie
+        function updateProjectCounts() {
+            document.querySelectorAll('.category').forEach(category => {
+                const projectCount = category.querySelectorAll('.project-btn').length;
+                const categoryTitle = category.querySelector('.category-title');
+                
+                // Ajouter un badge avec le nombre de projets
+                if (!categoryTitle.querySelector('.project-count')) {
+                    const countBadge = document.createElement('span');
+                    countBadge.className = 'project-count';
+                    countBadge.style.cssText = `
+                        background: rgba(255, 255, 255, 0.2);
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 0.8rem;
+                        margin-left: 10px;
+                    `;
+                    countBadge.textContent = `${projectCount}`;
+                    categoryTitle.appendChild(countBadge);
+                }
+            });
+        }
+
+        // Système de favoris (localStorage)
+        function initFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('dev-favorites') || '[]');
+            
+            document.querySelectorAll('.project-btn').forEach(btn => {
+                const projectName = btn.querySelector('.project-name').textContent;
+                
+                // Ajouter bouton favori
+                const favoriteBtn = document.createElement('button');
+                favoriteBtn.innerHTML = favorites.includes(projectName) ? '❤️' : '🤍';
+                favoriteBtn.style.cssText = `
+                    background: none;
+                    border: none;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    padding: 0;
+                    margin-left: auto;
+                `;
+                
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const currentFavorites = JSON.parse(localStorage.getItem('dev-favorites') || '[]');
+                    const index = currentFavorites.indexOf(projectName);
+                    
+                    if (index > -1) {
+                        currentFavorites.splice(index, 1);
+                        favoriteBtn.innerHTML = '🤍';
+                    } else {
+                        currentFavorites.push(projectName);
+                        favoriteBtn.innerHTML = '❤️';
+                    }
+                    
+                    localStorage.setItem('dev-favorites', JSON.stringify(currentFavorites));
+                });
+                
+                btn.appendChild(favoriteBtn);
+            });
+        }
+
+        // Statistiques d'usage
+        function trackProjectClick(projectName) {
+            const stats = JSON.parse(localStorage.getItem('project-stats') || '{}');
+            stats[projectName] = (stats[projectName] || 0) + 1;
+            localStorage.setItem('project-stats', JSON.stringify(stats));
+        }
+
+        // Ajouter tracking aux liens
+        document.querySelectorAll('.project-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const projectName = btn.querySelector('.project-name').textContent;
+                trackProjectClick(projectName);
+            });
+        });
+
+        // Filtre rapide par technologie
+        function addTechFilters() {
+            const filterContainer = document.createElement('div');
+            filterContainer.style.cssText = `
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-bottom: 20px;
+            `;
+            
+            const technologies = ['html', 'css', 'js', 'react', 'tool'];
+            const techLabels = {
+                html: 'HTML',
+                css: 'CSS', 
+                js: 'JavaScript',
+                react: 'React',
+                tool: 'Outils'
+            };
+            
+            technologies.forEach(tech => {
+                const filterBtn = document.createElement('button');
+                filterBtn.textContent = techLabels[tech];
+                filterBtn.style.cssText = `
+                    padding: 8px 16px;
+                    background: rgba(255, 255, 255, 0.1);
+                    color: white;
+                    border: 2px solid transparent;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                `;
+                
+                filterBtn.addEventListener('click', () => {
+                    // Reset autres filtres
+                    filterContainer.querySelectorAll('button').forEach(b => {
+                        b.style.background = 'rgba(255, 255, 255, 0.1)';
+                        b.style.borderColor = 'transparent';
+                    });
+                    
+                    const isActive = filterBtn.dataset.active === 'true';
+                    
+                    if (isActive) {
+                        // Désactiver le filtre
+                        filterBtn.dataset.active = 'false';
+                        document.querySelectorAll('.project-btn').forEach(btn => {
+                            btn.style.display = 'flex';
+                        });
+                    } else {
+                        // Activer le filtre
+                        filterBtn.dataset.active = 'true';
+                        filterBtn.style.background = 'rgba(255, 255, 255, 0.3)';
+                        filterBtn.style.borderColor = 'white';
+                        
+                        document.querySelectorAll('.project-btn').forEach(btn => {
+                            if (btn.classList.contains(tech)) {
+                                btn.style.display = 'flex';
+                                // Ouvrir la catégorie contenant ce projet
+                                const category = btn.closest('.category');
+                                if (category) category.classList.add('expanded');
+                            } else {
+                                btn.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+                
+                filterContainer.appendChild(filterBtn);
+            });
+            
+            // Bouton reset
+            const resetBtn = document.createElement('button');
+            resetBtn.textContent = '🔄 Tout afficher';
+            resetBtn.style.cssText = `
+                padding: 8px 16px;
+                background: rgba(255, 107, 107, 0.8);
+                color: white;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            `;
+            
+            resetBtn.addEventListener('click', () => {
+                document.querySelectorAll('.project-btn').forEach(btn => {
+                    btn.style.display = 'flex';
+                });
+                filterContainer.querySelectorAll('button').forEach(b => {
+                    b.style.background = 'rgba(255, 255, 255, 0.1)';
+                    b.style.borderColor = 'transparent';
+                    b.dataset.active = 'false';
+                });
+            });
+            
+            filterContainer.appendChild(resetBtn);
+            
+            // Insérer après la barre de recherche
+            const searchContainer = document.querySelector('.search-container');
+            searchContainer.parentNode.insertBefore(filterContainer, searchContainer.nextSibling);
+        }
+
+        // Mode sombre/clair
+        function addThemeToggle() {
+            const themeToggle = document.createElement('button');
+            themeToggle.innerHTML = '🌙';
+            themeToggle.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+                z-index: 1000;
+            `;
+            
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                themeToggle.innerHTML = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+            });
+            
+            document.body.appendChild(themeToggle);
+        }
+
+        // Raccourcis clavier
+        function addKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Ctrl + F pour focus sur la recherche
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    document.getElementById('searchInput').focus();
+                }
+                
+                // Échap pour vider la recherche
+                if (e.key === 'Escape') {
+                    const searchInput = document.getElementById('searchInput');
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+                
+                // Chiffres 1-6 pour changer d'onglet
+                if (e.key >= '1' && e.key <= '6') {
+                    const tabIndex = parseInt(e.key) - 1;
+                    const tabs = document.querySelectorAll('.tab-button');
+                    if (tabs[tabIndex]) {
+                        tabs[tabIndex].click();
+                    }
+                }
+            });
+        }
+
+        // Initialisation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            animateElements();
+            updateProjectCounts();
+            initFavorites();
+            addTechFilters();
+            addThemeToggle();
+            addKeyboardShortcuts();
+            
+            // Ouvrir la première catégorie par défaut
+            const firstCategory = document.querySelector('.category');
+            if (firstCategory) {
+                firstCategory.classList.add('expanded');
+            }
+        });
+
+        // Styles pour le thème sombre
+        const darkThemeStyles = `
+            .dark-theme {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            }
+            
+            .dark-theme .category {
+                background: rgba(0, 0, 0, 0.3);
+            }
+            
+            .dark-theme .project-btn {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+            
+            .dark-theme .project-btn:hover {
+                background: rgba(255, 255, 255, 0.2);
+                color: #3498db;
+            }
+            
+            .dark-theme .search-input {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+            }
+            
+            .dark-theme .search-input::placeholder {
+                color: rgba(255, 255, 255, 0.6);
+            }
+        `;
+        
+        // Ajouter les styles du thème sombre
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = darkThemeStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
