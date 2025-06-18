@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours sur les Tableaux HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        /* Styles de base pour tous les tableaux */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        
+        /* Styles pour le tableau 1 - Simple */
+        .tableau1 {
+            border: 1px solid #ddd;
+        }
+        
+        .tableau1 th, .tableau1 td {
+            border: 1px solid #ddd;
+        }
+        
+        .tableau1 th {
+            background-color: #f2f2f2;
+        }
+        
+        /* Styles pour le tableau 2 - Zébré */
+        .tableau2 th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .tableau2 tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        /* Styles pour le tableau 3 - Bordures arrondies */
+        .tableau3 {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        
+        .tableau3 th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        /* Styles pour le tableau 4 - Hover effect */
+        .tableau4 tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .tableau4 th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        /* Styles pour le tableau 5 - Coloré */
+        .tableau5 th {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .tableau5 td {
+            border-bottom: 1px solid #ddd;
+        }
+        
+        /* Styles pour le tableau 6 - Compact */
+        .tableau6 {
+            font-size: 0.9em;
+        }
+        
+        .tableau6 th, .tableau6 td {
+            padding: 4px;
+            border: 1px solid #ccc;
+        }
+        
+        .tableau6 th {
+            background-color: #f8f8f8;
+        }
+        
+        /* Styles pour le tableau 7 - Moderne */
+        .tableau7 {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        
+        .tableau7 th {
+            background-color: #e74c3c;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .tableau7 td {
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Styles pour le tableau 8 - Professionnel */
+        .tableau8 {
+            border: 1px solid #ddd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .tableau8 th {
+            background-color: #34495e;
+            color: white;
+            border: 1px solid #2c3e50;
+        }
+        
+        .tableau8 td {
+            border: 1px solid #ddd;
+        }
+        
+        /* Styles pour le tableau 9 - Minimaliste */
+        .tableau9 {
+            border: none;
+        }
+        
+        .tableau9 th {
+            border-bottom: 2px solid #333;
+            text-transform: uppercase;
+        }
+        
+        .tableau9 td {
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Styles pour le tableau 10 - Responsive */
+        @media screen and (max-width: 600px) {
+            .tableau10 {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        .tableau10 th {
+            background-color: #16a085;
+            color: white;
+        }
+        
+        .exemple {
+            margin-bottom: 40px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Les Tableaux en HTML - Guide Complet pour Débutants</h1>
+        
+        <div class="section">
+            <h2>1. Introduction aux Tableaux HTML</h2>
+            <p>Les tableaux HTML sont utilisés pour organiser des données en lignes et en colonnes. Ils permettent de présenter des informations de manière structurée et lisible. Bien que les tableaux aient été autrefois utilisés pour la mise en page des sites web, aujourd'hui ils sont principalement réservés à la présentation de données tabulaires.</p>
+        </div>
+        
+        <div class="section">
+            <h2>2. Structure de Base d'un Tableau HTML</h2>
+            <p>Un tableau HTML est constitué des balises suivantes:</p>
+            <ul>
+                <li><code>&lt;table&gt;</code> - Définit un tableau</li>
+                <li><code>&lt;tr&gt;</code> - Définit une ligne (Table Row)</li>
+                <li><code>&lt;th&gt;</code> - Définit une cellule d'en-tête (Table Header)</li>
+                <li><code>&lt;td&gt;</code> - Définit une cellule de données (Table Data)</li>
+                <li><code>&lt;caption&gt;</code> - Ajoute un titre au tableau</li>
+                <li><code>&lt;thead&gt;</code> - Regroupe le contenu d'en-tête</li>
+                <li><code>&lt;tbody&gt;</code> - Regroupe le contenu principal</li>
+                <li><code>&lt;tfoot&gt;</code> - Regroupe le contenu de pied de tableau</li>
+            </ul>
+            
+            <h3>Attributs importants:</h3>
+            <ul>
+                <li><code>colspan</code> - Nombre de colonnes qu'une cellule doit occuper</li>
+                <li><code>rowspan</code> - Nombre de lignes qu'une cellule doit occuper</li>
+                <li><code>border</code> - Définit l'épaisseur de la bordure (déprécié en HTML5, utiliser CSS)</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>3. Contenu des Tableaux</h2>
+            <p>Vous pouvez inclure dans un tableau:</p>
+            <ul>
+                <li>Du texte simple</li>
+                <li>Des nombres et des données chiffrées</li>
+                <li>Des liens (<code>&lt;a&gt;</code>)</li>
+                <li>Des images (<code>&lt;img&gt;</code>)</li>
+                <li>Des listes (<code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>)</li>
+                <li>Des formulaires (<code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>)</li>
+                <li>D'autres tableaux (tableaux imbriqués)</li>
+                <li>Tout autre élément HTML valide</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>4. Styliser les Tableaux avec CSS</h2>
+            <p>Propriétés CSS couramment utilisées pour les tableaux:</p>
+            <ul>
+                <li><code>border</code> - Définit les bordures</li>
+                <li><code>border-collapse</code> - Contrôle si les bordures doivent être fusionnées ou séparées</li>
+                <li><code>width</code>, <code>height</code> - Dimensions du tableau ou des cellules</li>
+                <li><code>text-align</code> - Alignement du texte dans les cellules</li>
+                <li><code>padding</code> - Espacement intérieur des cellules</li>
+                <li><code>background-color</code> - Couleur d'arrière-plan</li>
+                <li><code>color</code> - Couleur du texte</li>
+                <li><code>:hover</code> - Pour ajouter des effets au survol</li>
+                <li><code>:nth-child()</code> - Pour styler des lignes ou cellules spécifiques</li>
+            </ul>
+        </div>
+        
+        <h2>5. Exemples de Tableaux</h2>
+        
+        <div class="exemple">
+            <h3>Exemple 1: Tableau Basique</h3>
+            <!-- Commentaire: Structure de base d'un tableau avec en-têtes -->
+            <table class="tableau1">
+                <caption>Liste des étudiants</caption>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Âge</th>
+                </tr>
+                <tr>
+                    <td>Dupont</td>
+                    <td>Jean</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td>Martin</td>
+                    <td>Sophie</td>
+                    <td>22</td>
+                </tr>
+                <tr>
+                    <td>Bernard</td>
+                    <td>Michel</td>
+                    <td>28</td>
+                </tr>
+            </table>
+            <p>Ce tableau simple utilise <code>&lt;th&gt;</code> pour les en-têtes et <code>&lt;td&gt;</code> pour les données. Les bordures sont ajoutées avec CSS.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 2: Tableau Zébré (Alternance de couleurs)</h3>
+            <!-- Commentaire: Tableau avec lignes alternées pour une meilleure lisibilité -->
+            <table class="tableau2">
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Stock</th>
+                </tr>
+                <tr>
+                    <td>Ordinateur portable</td>
+                    <td>999 €</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td>Smartphone</td>
+                    <td>599 €</td>
+                    <td>32</td>
+                </tr>
+                <tr>
+                    <td>Tablette</td>
+                    <td>349 €</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>Écran 24"</td>
+                    <td>199 €</td>
+                    <td>23</td>
+                </tr>
+            </table>
+            <p>Ce tableau utilise la pseudo-classe <code>:nth-child(even)</code> pour colorer une ligne sur deux, améliorant ainsi la lisibilité.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 3: Tableau avec bordures arrondies</h3>
+            <!-- Commentaire: Tableau avec style moderne et bordures arrondies -->
+            <table class="tableau3">
+                <tr>
+                    <th>Pays</th>
+                    <th>Capitale</th>
+                    <th>Population</th>
+                </tr>
+                <tr>
+                    <td>France</td>
+                    <td>Paris</td>
+                    <td>67 millions</td>
+                </tr>
+                <tr>
+                    <td>Allemagne</td>
+                    <td>Berlin</td>
+                    <td>83 millions</td>
+                </tr>
+                <tr>
+                    <td>Espagne</td>
+                    <td>Madrid</td>
+                    <td>47 millions</td>
+                </tr>
+            </table>
+            <p>Ce tableau utilise <code>border-radius</code> et <code>overflow: hidden</code> pour créer des coins arrondis.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 4: Tableau avec effet hover</h3>
+            <!-- Commentaire: Tableau réactif qui change au survol -->
+            <table class="tableau4">
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                </tr>
+                <tr>
+                    <td>Jean Dupont</td>
+                    <td>jean.dupont@email.com</td>
+                    <td>01 23 45 67 89</td>
+                </tr>
+                <tr>
+                    <td>Marie Lambert</td>
+                    <td>marie.lambert@email.com</td>
+                    <td>06 12 34 56 78</td>
+                </tr>
+                <tr>
+                    <td>Paul Martin</td>
+                    <td>paul.martin@email.com</td>
+                    <td>07 65 43 21 09</td>
+                </tr>
+            </table>
+            <p>Ce tableau utilise <code>:hover</code> pour changer la couleur de fond d'une ligne lorsque la souris la survole.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 5: Tableau coloré</h3>
+            <!-- Commentaire: Tableau avec des couleurs vives -->
+            <table class="tableau5">
+                <tr>
+                    <th>Module</th>
+                    <th>Heures</th>
+                    <th>Crédits</th>
+                </tr>
+                <tr>
+                    <td>HTML/CSS</td>
+                    <td>30</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>JavaScript</td>
+                    <td>45</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>PHP</td>
+                    <td>40</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>SQL</td>
+                    <td>25</td>
+                    <td>2</td>
+                </tr>
+            </table>
+            <p>Ce tableau utilise des couleurs vives pour l'en-tête et des bordures subtiles pour séparer les données.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 6: Tableau compact</h3>
+            <!-- Commentaire: Tableau avec style compact pour économiser de l'espace -->
+            <table class="tableau6">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Stock</th>
+                    <th>Prix</th>
+                    <th>Catégorie</th>
+                </tr>
+                <tr>
+                    <td>001</td>
+                    <td>Clavier</td>
+                    <td>45</td>
+                    <td>29.99€</td>
+                    <td>Périphériques</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>Souris</td>
+                    <td>78</td>
+                    <td>19.99€</td>
+                    <td>Périphériques</td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>Écran</td>
+                    <td>12</td>
+                    <td>159.99€</td>
+                    <td>Moniteurs</td>
+                </tr>
+                <tr>
+                    <td>004</td>
+                    <td>Webcam</td>
+                    <td>23</td>
+                    <td>49.99€</td>
+                    <td>Accessoires</td>
+                </tr>
+            </table>
+            <p>Ce tableau utilise une taille de police réduite et un padding minimal pour créer un style compact, idéal pour de grandes quantités de données.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 7: Tableau moderne avec ombres</h3>
+            <!-- Commentaire: Tableau avec design moderne et ombres -->
+            <table class="tableau7">
+                <tr>
+                    <th>Plan</th>
+                    <th>Prix</th>
+                    <th>Stockage</th>
+                    <th>Support</th>
+                </tr>
+                <tr>
+                    <td>Basique</td>
+                    <td>9.99€/mois</td>
+                    <td>10 GB</td>
+                    <td>Email</td>
+                </tr>
+                <tr>
+                    <td>Standard</td>
+                    <td>19.99€/mois</td>
+                    <td>50 GB</td>
+                    <td>Email + Chat</td>
+                </tr>
+                <tr>
+                    <td>Premium</td>
+                    <td>29.99€/mois</td>
+                    <td>100 GB</td>
+                    <td>Email + Chat + Téléphone</td>
+                </tr>
+            </table>
+            <p>Ce tableau utilise des ombres (box-shadow) et des couleurs contrastées pour un aspect moderne et élégant.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 8: Tableau professionnel</h3>
+            <!-- Commentaire: Tableau avec style professionnel pour entreprises -->
+            <table class="tableau8">
+                <thead>
+                    <tr>
+                        <th>Trimestre</th>
+                        <th>Chiffre d'affaires</th>
+                        <th>Charges</th>
+                        <th>Bénéfice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>T1 2023</td>
+                        <td>125.000 €</td>
+                        <td>85.000 €</td>
+                        <td>40.000 €</td>
+                    </tr>
+                    <tr>
+                        <td>T2 2023</td>
+                        <td>142.000 €</td>
+                        <td>90.000 €</td>
+                        <td>52.000 €</td>
+                    </tr>
+                    <tr>
+                        <td>T3 2023</td>
+                        <td>137.000 €</td>
+                        <td>88.000 €</td>
+                        <td>49.000 €</td>
+                    </tr>
+                    <tr>
+                        <td>T4 2023</td>
+                        <td>156.000 €</td>
+                        <td>94.000 €</td>
+                        <td>62.000 €</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Ce tableau utilise <code>&lt;thead&gt;</code> et <code>&lt;tbody&gt;</code> pour une organisation sémantique, avec un style professionnel adapté aux rapports financiers.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 9: Tableau minimaliste</h3>
+            <!-- Commentaire: Tableau avec design épuré et minimaliste -->
+            <table class="tableau9">
+                <tr>
+                    <th>Artiste</th>
+                    <th>Album</th>
+                    <th>Année</th>
+                </tr>
+                <tr>
+                    <td>The Beatles</td>
+                    <td>Abbey Road</td>
+                    <td>1969</td>
+                </tr>
+                <tr>
+                    <td>Pink Floyd</td>
+                    <td>Dark Side of the Moon</td>
+                    <td>1973</td>
+                </tr>
+                <tr>
+                    <td>David Bowie</td>
+                    <td>Space Oddity</td>
+                    <td>1969</td>
+                </tr>
+                <tr>
+                    <td>Queen</td>
+                    <td>A Night at the Opera</td>
+                    <td>1975</td>
+                </tr>
+            </table>
+            <p>Ce tableau adopte un style minimaliste avec des bordures uniquement sous chaque ligne, pour un design épuré et moderne.</p>
+        </div>
+        
+        <div class="exemple">
+            <h3>Exemple 10: Tableau responsive</h3>
+            <!-- Commentaire: Tableau qui s'adapte aux petits écrans -->
+            <table class="tableau10">
+                <tr>
+                    <th>Fonctionnalité</th>
+                    <th>Description</th>
+                    <th>Statut</th>
+                    <th>Priorité</th>
+                </tr>
+                <tr>
+                    <td>Authentification</td>
+                    <td>Système de connexion des utilisateurs</td>
+                    <td>Terminé</td>
+                    <td>Haute</td>
+                </tr>
+                <tr>
+                    <td>Panier d'achat</td>
+                    <td>Ajout et gestion des produits</td>
+                    <td>En cours</td>
+                    <td>Moyenne</td>
+                </tr>
+                <tr>
+                    <td>Paiement en ligne</td>
+                    <td>Intégration de passerelles de paiement</td>
+                    <td>À faire</td>
+                    <td>Haute</td>
+                </tr>
+                <tr>
+                    <td>Notifications</td>
+                    <td>Alertes email et push</td>
+                    <td>À faire</td>
+                    <td>Basse</td>
+                </tr>
+            </table>
+            <p>Ce tableau est responsive grâce à <code>overflow-x: auto</code> qui ajoute une barre de défilement horizontale sur les petits écrans plutôt que de casser la mise en page.</p>
+        </div>
+        
+        <div class="section">
+            <h2>6. Bonnes Pratiques et Conseils</h2>
+            <ul>
+                <li>Utilisez des tableaux uniquement pour des données tabulaires, pas pour la mise en page</li>
+                <li>Incluez toujours des en-têtes (<code>&lt;th&gt;</code>) pour améliorer l'accessibilité</li>
+                <li>Utilisez <code>&lt;caption&gt;</code> pour donner un titre descriptif à votre tableau</li>
+                <li>Préférez <code>border-collapse: collapse</code> pour éviter les doubles bordures</li>
+                <li>Utilisez <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code> et <code>&lt;tfoot&gt;</code> pour une meilleure structure sémantique</li>
+                <li>Pensez à l'accessibilité en utilisant l'attribut <code>scope</code> sur les en-têtes</li>
+                <li>Pour les tableaux complexes, utilisez les attributs <code>headers</code> et <code>id</code> pour associer cellules et en-têtes</li>
+                <li>Rendez vos tableaux responsive pour les petits écrans</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript peut être utilisé pour manipuler les tableaux dynamiquement
+        // Par exemple, pour trier un tableau, mettre en évidence certaines lignes, etc.
+        
+        // Exemple simple d'une fonction pour trier un tableau
+        function trierTableau(tableId, colonne) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody') || table;
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Ignorer la ligne d'en-tête si elle existe
+            const dataRows = rows.slice(table.querySelector('thead') ? 0 : 1);
+            
+            dataRows.sort((a, b) => {
+                const cellA = a.cells[colonne].textContent;
+                const cellB = b.cells[colonne].textContent;
+                return cellA.localeCompare(cellB);
+            });
+            
+            // Réinsérer les lignes triées
+            dataRows.forEach(row => tbody.appendChild(row));
+        }
+        
+        // Cette fonction pourrait être appelée sur un clic d'en-tête, par exemple
+    </script>
+</body>
+</html></div>
