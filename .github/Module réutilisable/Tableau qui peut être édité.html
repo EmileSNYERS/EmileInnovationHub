@@ -1,9 +1,44 @@
 <!DOCTYPE html>
+<!-- 
+Titre : Cours sur les Tableaux HTML
+Description : Un guide complet pour apprendre à créer et styliser des tableaux en HTML.
+Auteur : Emile SNYERS avec de ChatGPT ou Claude IA
+Date de création : 2025-06-18
+Version : 1.0
+Licence : © 2025 Emile SNYERS. Droit d'utilisation libre à condition de citer l'auteur et d'utiliser à but non commercial.
+Note : Toute utilisation de ce contenu doit obligatoirement mentionner le nom du créateur, Emile SNYERS.
+
+Title: HTML Tables Course
+Description: A complete guide to learning how to create and style tables in HTML.
+Author: Emile SNYERS with ChatGPT or Claude AI
+Creation Date: 2025-06-18
+Version: 1.0
+License: © 2025 Emile SNYERS. Free use permitted with attribution to the author and for non-commercial purposes only.
+Note: Any use of this content must include attribution to the creator, Emile SNYERS.
+
+タイトル: HTML表の講座
+説明: HTMLで表を作成してスタイル設定する方法を学ぶための完全ガイド
+作者: Emile SNYERS with ChatGPT or Claude AI
+作成日: 2025-06-18
+バージョン: 1.0
+ライセンス: © 2025 Emile SNYERS. 著者を引用し、非営利目的で使用することを条件に自由に使用できます。
+注意: このコンテンツを使用する場合は、必ず作成者であるEmile SNYERSの名前を明記してください。
+
+כותרת: קורס טבלאות HTML
+תיאור: מדריך מקיף ללמידה כיצד ליצור ולעצב טבלאות ב-HTML
+מחבר: Emile SNYERS עם ChatGPT או Claude AI
+תאריך יצירה: 2025-06-18
+גרסה: 1.0
+רישיון: © 2025 Emile SNYERS. שימוש חופשי מותר בתנאי ציון שם המחבר ולמטרות לא מסחריות בלבד.
+הערה: כל שימוש בתוכן זה חייב לכלול ייחוס ליוצר, Emile SNYERS.
+-->
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Éditeur de Tableau Dynamique</title>
+    <!-- Bibliothèque SheetJS pour l'export Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         /* ========================================
            STYLES GÉNÉRAUX DE L'APPLICATION
@@ -386,8 +421,11 @@
                 <button class="btn-success" onclick="addColumn()">
                     ➕ Ajouter Colonne
                 </button>
-                <button class="btn-primary" onclick="exportTable()">
-                    💾 Exporter
+                <button class="btn-primary" onclick="exportTableCSV()">
+                    💾 Export CSV
+                </button>
+                <button class="btn-primary" onclick="exportTableExcel()">
+                    📊 Export Excel
                 </button>
             </div>
 
@@ -664,13 +702,37 @@
             const controls = document.createElement('div');
             controls.className = 'row-controls';
             
-            const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+            // Utiliser des fonctions avec this pour obtenir l'index dynamiquement
+            const upBtn = document.createElement('button');
+            upBtn.className = 'control-btn btn-success';
+            upBtn.title = 'Insérer avant';
+            upBtn.innerHTML = '⬆️';
+            upBtn.onclick = function() {
+                const rowIndex = Array.from(this.closest('tr').parentNode.children).indexOf(this.closest('tr'));
+                insertRowBefore(rowIndex);
+            };
             
-            controls.innerHTML = `
-                <button class="control-btn btn-success" onclick="insertRowBefore(${rowIndex})" title="Insérer avant">⬆️</button>
-                <button class="control-btn btn-success" onclick="insertRowAfter(${rowIndex})" title="Insérer après">⬇️</button>
-                <button class="control-btn btn-danger" onclick="deleteRow(${rowIndex})" title="Supprimer">❌</button>
-            `;
+            const downBtn = document.createElement('button');
+            downBtn.className = 'control-btn btn-success';
+            downBtn.title = 'Insérer après';
+            downBtn.innerHTML = '⬇️';
+            downBtn.onclick = function() {
+                const rowIndex = Array.from(this.closest('tr').parentNode.children).indexOf(this.closest('tr'));
+                insertRowAfter(rowIndex);
+            };
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'control-btn btn-danger';
+            deleteBtn.title = 'Supprimer';
+            deleteBtn.innerHTML = '❌';
+            deleteBtn.onclick = function() {
+                const rowIndex = Array.from(this.closest('tr').parentNode.children).indexOf(this.closest('tr'));
+                deleteRow(rowIndex);
+            };
+            
+            controls.appendChild(upBtn);
+            controls.appendChild(downBtn);
+            controls.appendChild(deleteBtn);
             
             row.appendChild(controls);
         }
@@ -684,11 +746,36 @@
             const controls = document.createElement('div');
             controls.className = 'column-controls';
             
-            controls.innerHTML = `
-                <button class="control-btn btn-success" onclick="insertColumnBefore(${index})" title="Insérer avant">⬅️</button>
-                <button class="control-btn btn-success" onclick="insertColumnAfter(${index})" title="Insérer après">➡️</button>
-                <button class="control-btn btn-danger" onclick="deleteColumn(${index})" title="Supprimer">❌</button>
-            `;
+            const leftBtn = document.createElement('button');
+            leftBtn.className = 'control-btn btn-success';
+            leftBtn.title = 'Insérer avant';
+            leftBtn.innerHTML = '⬅️';
+            leftBtn.onclick = function() {
+                const colIndex = Array.from(this.closest('th').parentNode.children).indexOf(this.closest('th'));
+                insertColumnBefore(colIndex);
+            };
+            
+            const rightBtn = document.createElement('button');
+            rightBtn.className = 'control-btn btn-success';
+            rightBtn.title = 'Insérer après';
+            rightBtn.innerHTML = '➡️';
+            rightBtn.onclick = function() {
+                const colIndex = Array.from(this.closest('th').parentNode.children).indexOf(this.closest('th'));
+                insertColumnAfter(colIndex);
+            };
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'control-btn btn-danger';
+            deleteBtn.title = 'Supprimer';
+            deleteBtn.innerHTML = '❌';
+            deleteBtn.onclick = function() {
+                const colIndex = Array.from(this.closest('th').parentNode.children).indexOf(this.closest('th'));
+                deleteColumn(colIndex);
+            };
+            
+            controls.appendChild(leftBtn);
+            controls.appendChild(rightBtn);
+            controls.appendChild(deleteBtn);
             
             header.appendChild(controls);
         }
@@ -719,9 +806,6 @@
             
             addRowControls(newRow);
             tbody.insertBefore(newRow, rows[index]);
-            
-            // Mettre à jour les indices des contrôles
-            updateRowControlsIndices();
         }
 
         /**
@@ -751,8 +835,6 @@
             } else {
                 tbody.appendChild(newRow);
             }
-            
-            updateRowControlsIndices();
         }
 
         /**
@@ -766,7 +848,6 @@
             if (rows.length > 1) { // Garder au moins une ligne
                 console.log(`🗑️ Suppression de la ligne ${index}`);
                 rows[index].remove();
-                updateRowControlsIndices();
             } else {
                 alert('⚠️ Il doit y avoir au moins une ligne dans le tableau !');
             }
@@ -799,8 +880,6 @@
                     row.insertBefore(cell, row.children[index]);
                 });
             }
-            
-            updateColumnControlsIndices();
         }
 
         /**
@@ -840,8 +919,6 @@
                     }
                 });
             }
-            
-            updateColumnControlsIndices();
         }
 
         /**
@@ -867,53 +944,9 @@
                         }
                     });
                 }
-                
-                updateColumnControlsIndices();
             } else {
                 alert('⚠️ Il doit y avoir au moins une colonne dans le tableau !');
             }
-        }
-
-        // ========================================
-        // FONCTIONS DE MISE À JOUR DES INDICES
-        // ========================================
-        
-        /**
-         * Met à jour les indices des contrôles de lignes après modification
-         */
-        function updateRowControlsIndices() {
-            const tbody = document.querySelector('#dynamicTable tbody');
-            const rows = tbody.querySelectorAll('tr');
-            
-            rows.forEach((row, index) => {
-                const controls = row.querySelector('.row-controls');
-                if (controls) {
-                    controls.innerHTML = `
-                        <button class="control-btn btn-success" onclick="insertRowBefore(${index})" title="Insérer avant">⬆️</button>
-                        <button class="control-btn btn-success" onclick="insertRowAfter(${index})" title="Insérer après">⬇️</button>
-                        <button class="control-btn btn-danger" onclick="deleteRow(${index})" title="Supprimer">❌</button>
-                    `;
-                }
-            });
-        }
-
-        /**
-         * Met à jour les indices des contrôles de colonnes après modification
-         */
-        function updateColumnControlsIndices() {
-            const thead = document.querySelector('#dynamicTable thead tr');
-            const headers = thead.querySelectorAll('th');
-            
-            headers.forEach((header, index) => {
-                const controls = header.querySelector('.column-controls');
-                if (controls) {
-                    controls.innerHTML = `
-                        <button class="control-btn btn-success" onclick="insertColumnBefore(${index})" title="Insérer avant">⬅️</button>
-                        <button class="control-btn btn-success" onclick="insertColumnAfter(${index})" title="Insérer après">➡️</button>
-                        <button class="control-btn btn-danger" onclick="deleteColumn(${index})" title="Supprimer">❌</button>
-                    `;
-                }
-            });
         }
 
         // ========================================
@@ -1176,15 +1209,15 @@
         }
 
         // ========================================
-        // FONCTION D'EXPORT DU TABLEAU
+        // FONCTIONS D'EXPORT DU TABLEAU
         // ========================================
         
         /**
          * Exporte le tableau au format CSV
          * Collecte toutes les données et génère un fichier téléchargeable
          */
-        function exportTable() {
-            console.log('💾 Début de l\'export du tableau');
+        function exportTableCSV() {
+            console.log('💾 Début de l\'export CSV du tableau');
             
             const table = document.getElementById('dynamicTable');
             const rows = table.querySelectorAll('tr');
@@ -1197,25 +1230,7 @@
                 
                 cells.forEach(cell => {
                     // Extraire le contenu selon le type d'élément
-                    let cellContent = '';
-                    
-                    const checkbox = cell.querySelector('input[type="checkbox"]');
-                    const select = cell.querySelector('select');
-                    const input = cell.querySelector('input[type="number"], input[type="date"]');
-                    const editableDiv = cell.querySelector('.editable-cell');
-                    
-                    if (checkbox) {
-                        const label = cell.querySelector('label');
-                        cellContent = `${label ? label.textContent : 'Case'}: ${checkbox.checked ? 'Oui' : 'Non'}`;
-                    } else if (select) {
-                        cellContent = select.value || select.options[select.selectedIndex]?.text || '';
-                    } else if (input) {
-                        cellContent = input.value || '';
-                    } else if (editableDiv) {
-                        cellContent = editableDiv.textContent || '';
-                    } else {
-                        cellContent = cell.textContent || '';
-                    }
+                    let cellContent = extractCellContent(cell);
                     
                     // Nettoyer et échapper le contenu pour CSV
                     cellContent = cellContent.replace(/"/g, '""'); // Échapper les guillemets
@@ -1227,19 +1242,134 @@
             
             // Créer et télécharger le fichier
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            downloadFile(blob, `tableau_dynamique_${new Date().toISOString().slice(0,10)}.csv`);
+            
+            console.log('✅ Export CSV terminé avec succès');
+            alert('📄 Tableau exporté en CSV avec succès !');
+        }
+
+        /**
+         * Exporte le tableau au format Excel (.xlsx)
+         * Utilise la bibliothèque SheetJS pour créer un fichier Excel complet
+         */
+        function exportTableExcel() {
+            console.log('📊 Début de l\'export Excel du tableau');
+            
+            try {
+                const table = document.getElementById('dynamicTable');
+                const rows = table.querySelectorAll('tr');
+                const worksheetData = [];
+                
+                // Parcourir toutes les lignes et extraire les données
+                rows.forEach((row, rowIndex) => {
+                    const cells = row.querySelectorAll('th, td');
+                    const rowData = [];
+                    
+                    cells.forEach(cell => {
+                        let cellContent = extractCellContent(cell);
+                        rowData.push(cellContent);
+                    });
+                    
+                    worksheetData.push(rowData);
+                });
+                
+                // Créer un nouveau classeur Excel
+                const workbook = XLSX.utils.book_new();
+                
+                // Créer une feuille de calcul à partir des données
+                const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+                
+                // Définir la largeur automatique des colonnes
+                const columnWidths = [];
+                if (worksheetData.length > 0) {
+                    for (let i = 0; i < worksheetData[0].length; i++) {
+                        let maxWidth = 10;
+                        worksheetData.forEach(row => {
+                            if (row[i] && row[i].toString().length > maxWidth) {
+                                maxWidth = Math.min(row[i].toString().length + 2, 50);
+                            }
+                        });
+                        columnWidths.push({ wch: maxWidth });
+                    }
+                    worksheet['!cols'] = columnWidths;
+                }
+                
+                // Styliser l'en-tête si elle existe
+                if (worksheetData.length > 0) {
+                    for (let i = 0; i < worksheetData[0].length; i++) {
+                        const cellRef = XLSX.utils.encode_cell({ r: 0, c: i });
+                        if (worksheet[cellRef]) {
+                            worksheet[cellRef].s = {
+                                font: { bold: true },
+                                fill: { fgColor: { rgb: "CCCCCC" } },
+                                alignment: { horizontal: "center" }
+                            };
+                        }
+                    }
+                }
+                
+                // Ajouter la feuille au classeur
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Tableau Dynamique");
+                
+                // Générer le fichier Excel et le télécharger
+                const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                downloadFile(blob, `tableau_dynamique_${new Date().toISOString().slice(0,10)}.xlsx`);
+                
+                console.log('✅ Export Excel terminé avec succès');
+                alert('📊 Tableau exporté en Excel avec succès !');
+                
+            } catch (error) {
+                console.error('❌ Erreur lors de l\'export Excel:', error);
+                alert('❌ Erreur lors de l\'export Excel. Veuillez réessayer.');
+            }
+        }
+
+        /**
+         * Fonction utilitaire pour extraire le contenu d'une cellule
+         * Gère différents types d'éléments (texte, checkbox, select, etc.)
+         * @param {HTMLElement} cell - La cellule dont extraire le contenu
+         * @returns {string} Le contenu textuel de la cellule
+         */
+        function extractCellContent(cell) {
+            const checkbox = cell.querySelector('input[type="checkbox"]');
+            const select = cell.querySelector('select');
+            const input = cell.querySelector('input[type="number"], input[type="date"]');
+            const editableDiv = cell.querySelector('.editable-cell');
+            
+            if (checkbox) {
+                const label = cell.querySelector('label');
+                return `${label ? label.textContent : 'Case'}: ${checkbox.checked ? 'Oui' : 'Non'}`;
+            } else if (select) {
+                return select.value || select.options[select.selectedIndex]?.text || '';
+            } else if (input) {
+                return input.value || '';
+            } else if (editableDiv) {
+                return editableDiv.textContent || '';
+            } else {
+                return cell.textContent || '';
+            }
+        }
+
+        /**
+         * Fonction utilitaire pour télécharger un fichier
+         * @param {Blob} blob - Le blob contenant les données du fichier
+         * @param {string} filename - Le nom du fichier à télécharger
+         */
+        function downloadFile(blob, filename) {
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             
             link.setAttribute('href', url);
-            link.setAttribute('download', `tableau_dynamique_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute('download', filename);
             link.style.visibility = 'hidden';
             
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            console.log('✅ Export terminé avec succès');
-            alert('📄 Tableau exporté avec succès !');
+            // Nettoyer l'URL pour libérer la mémoire
+            URL.revokeObjectURL(url);
         }
 
         // ========================================
