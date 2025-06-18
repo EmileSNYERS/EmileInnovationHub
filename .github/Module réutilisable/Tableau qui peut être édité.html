@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur de Tableau Dynamique</title>
+    <style>
+        /* ========================================
+           STYLES GÉNÉRAUX DE L'APPLICATION
+        ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* ========================================
+           HEADER ET TITRE PRINCIPAL
+        ======================================== */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* ========================================
+           BARRE D'OUTILS PRINCIPALE
+        ======================================== */
+        .toolbar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .tool-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tool-group label {
+            font-weight: 600;
+            color: #495057;
+            margin-right: 8px;
+        }
+
+        /* ========================================
+           STYLES DES BOUTONS
+        ======================================== */
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #212529;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* ========================================
+           ZONE PRINCIPALE DU TABLEAU
+        ======================================== */
+        .table-container {
+            padding: 30px;
+            background: white;
+            position: relative;
+        }
+
+        .table-wrapper {
+            position: relative;
+            overflow-x: auto;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            background: white;
+        }
+
+        /* ========================================
+           STYLES DU TABLEAU
+        ======================================== */
+        #dynamicTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+        }
+
+        #dynamicTable th,
+        #dynamicTable td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+            position: relative;
+            min-width: 120px;
+        }
+
+        #dynamicTable th {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* ========================================
+           CELLULES ÉDITABLES
+        ======================================== */
+        .editable-cell {
+            cursor: text;
+            min-height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .editable-cell:hover {
+            background-color: #f8f9fa;
+            box-shadow: inset 0 0 0 2px #007bff;
+        }
+
+        .editable-cell:focus {
+            outline: none;
+            background-color: #fff3cd;
+            box-shadow: inset 0 0 0 2px #ffc107;
+        }
+
+        /* ========================================
+           BOUTONS D'ACTION SUR LES LIGNES/COLONNES
+        ======================================== */
+        .row-controls {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .column-controls {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        tr:hover .row-controls,
+        th:hover .column-controls {
+            opacity: 1;
+        }
+
+        .control-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* ========================================
+           ÉLÉMENTS INTERACTIFS DANS LES CELLULES
+        ======================================== */
+        .cell-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cell-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .cell-select {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+        }
+
+        /* ========================================
+           MODAL POUR LES OPTIONS AVANCÉES
+        ======================================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            min-width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        /* ========================================
+           FORMULAIRES ET CONTRÔLES
+        ======================================== */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* ========================================
+           ANIMATIONS ET EFFETS VISUELS
+        ======================================== */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* ========================================
+           RESPONSIVE DESIGN
+        ======================================== */
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .tool-group {
+                justify-content: center;
+            }
+            
+            .table-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========================================
+         STRUCTURE PRINCIPALE DE L'APPLICATION
+    ======================================== -->
+    <div class="container">
+        <!-- Header avec titre et description -->
+        <div class="header">
+            <h1>🎯 Éditeur de Tableau Dynamique</h1>
+            <p>Créez et personnalisez vos tableaux avec une interface intuitive</p>
+        </div>
+
+        <!-- Barre d'outils principale avec tous les contrôles -->
+        <div class="toolbar">
+            <!-- Groupe : Gestion du tableau -->
+            <div class="tool-group">
+                <label>📊 Tableau :</label>
+                <button class="btn-success" onclick="addRow()">
+                    ➕ Ajouter Ligne
+                </button>
+                <button class="btn-success" onclick="addColumn()">
+                    ➕ Ajouter Colonne
+                </button>
+                <button class="btn-primary" onclick="exportTable()">
+                    💾 Exporter
+                </button>
+            </div>
+
+            <!-- Groupe : Mise en forme du texte -->
+            <div class="tool-group">
+                <label>✏️ Texte :</label>
+                <button class="btn-warning" onclick="toggleBold()">
+                    <b>B</b>
+                </button>
+                <button class="btn-warning" onclick="toggleItalic()">
+                    <i>I</i>
+                </button>
+                <input type="color" class="color-picker" id="textColor" 
+                       onchange="changeTextColor(this.value)" title="Couleur du texte">
+                <input type="color" class="color-picker" id="bgColor" 
+                       onchange="changeBgColor(this.value)" title="Couleur de fond">
+            </div>
+
+            <!-- Groupe : Police et taille -->
+            <div class="tool-group">
+                <label>🔤 Police :</label>
+                <select id="fontFamily" onchange="changeFontFamily(this.value)">
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Georgia">Georgia</option>
+                </select>
+                <select id="fontSize" onchange="changeFontSize(this.value)">
+                    <option value="12px">12px</option>
+                    <option value="14px" selected>14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
+                </select>
+            </div>
+
+            <!-- Groupe : Éléments interactifs -->
+            <div class="tool-group">
+                <label>🎛️ Éléments :</label>
+                <button class="btn-primary" onclick="insertCheckbox()">
+                    ☑️ Case à cocher
+                </button>
+                <button class="btn-primary" onclick="insertDropdown()">
+                    📋 Liste déroulante
+                </button>
+                <button class="btn-primary" onclick="openCellOptions()">
+                    ⚙️ Options cellule
+                </button>
+            </div>
+        </div>
+
+        <!-- Zone principale contenant le tableau -->
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table id="dynamicTable">
+                    <thead>
+                        <tr>
+                            <th style="position: relative;">
+                                Colonne 1
+                                <!-- Boutons de contrôle des colonnes -->
+                                <div class="column-controls">
+                                    <button class="control-btn btn-success" onclick="insertColumnBefore(0)" title="Insérer avant">⬅️</button>
+                                    <button class="control-btn btn-success" onclick="insertColumnAfter(0)" title="Insérer après">➡️</button>
+                                    <button class="control-btn btn-danger" onclick="deleteColumn(0)" title="Supprimer">❌</button>
+                                </div>
+                            </th>
+                            <th style="position: relative;">
+                                Colonne 2
+                                <div class="column-controls">
+                                    <button class="control-btn btn-success" onclick="insertColumnBefore(1)" title="Insérer avant">⬅️</button>
+                                    <button class="control-btn btn-success" onclick="insertColumnAfter(1)" title="Insérer après">➡️</button>
+                                    <button class="control-btn btn-danger" onclick="deleteColumn(1)" title="Supprimer">❌</button>
+                                </div>
+                            </th>
+                            <th style="position: relative;">
+                                Colonne 3
+                                <div class="column-controls">
+                                    <button class="control-btn btn-success" onclick="insertColumnBefore(2)" title="Insérer avant">⬅️</button>
+                                    <button class="control-btn btn-success" onclick="insertColumnAfter(2)" title="Insérer après">➡️</button>
+                                    <button class="control-btn btn-danger" onclick="deleteColumn(2)" title="Supprimer">❌</button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Les lignes du tableau seront générées dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour les options avancées des cellules -->
+    <div id="cellOptionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Options de la cellule</h3>
+                <button class="close-btn" onclick="closeCellOptions()">✖️</button>
+            </div>
+            <div class="form-group">
+                <label>Type de contenu :</label>
+                <select id="cellType" onchange="updateCellTypeOptions()">
+                    <option value="text">Texte simple</option>
+                    <option value="checkbox">Case à cocher</option>
+                    <option value="dropdown">Liste déroulante</option>
+                    <option value="number">Nombre</option>
+                    <option value="date">Date</option>
+                </select>
+            </div>
+            <div id="checkboxOptions" style="display: none;">
+                <div class="form-group">
+                    <label>Texte de la case à cocher :</label>
+                    <input type="text" id="checkboxText" placeholder="Texte à afficher">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="checkboxChecked"> Cochée par défaut
+                    </label>
+                </div>
+            </div>
+            <div id="dropdownOptions" style="display: none;">
+                <div class="form-group">
+                    <label>Options de la liste (une par ligne) :</label>
+                    <textarea id="dropdownItems" rows="4" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn-primary" onclick="applyCellOptions()">Appliquer les modifications</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // VARIABLES GLOBALES DE L'APPLICATION
+        // ========================================
+        
+        // Référence vers la cellule actuellement sélectionnée
+        let selectedCell = null;
+        
+        // Compteur pour générer des IDs uniques pour les éléments
+        let elementIdCounter = 0;
+        
+        // Stockage des données du tableau pour l'export
+        let tableData = [];
+
+        // ========================================
+        // INITIALISATION DE L'APPLICATION
+        // ========================================
+        
+        /**
+         * Fonction d'initialisation appelée au chargement de la page
+         * Configure le tableau initial avec quelques lignes par défaut
+         */
+        function initializeTable() {
+            console.log('🚀 Initialisation du tableau dynamique');
+            
+            // Créer 3 lignes par défaut pour commencer
+            for (let i = 0; i < 3; i++) {
+                addRow();
+            }
+            
+            // Ajouter des exemples de contenu pour la démonstration
+            populateExampleData();
+            
+            console.log('✅ Tableau initialisé avec succès');
+        }
+
+        /**
+         * Ajoute des données d'exemple pour montrer les fonctionnalités
+         */
+        function populateExampleData() {
+            const tbody = document.querySelector('#dynamicTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            if (rows.length >= 3) {
+                // Première ligne avec du texte simple
+                rows[0].cells[0].innerHTML = '<div contenteditable="true" class="editable-cell">Produit A</div>';
+                rows[0].cells[1].innerHTML = '<div contenteditable="true" class="editable-cell" style="font-weight: bold; color: #007bff;">99.99 €</div>';
+                rows[0].cells[2].innerHTML = '<div contenteditable="true" class="editable-cell">Disponible</div>';
+                
+                // Deuxième ligne avec une case à cocher
+                rows[1].cells[0].innerHTML = '<div contenteditable="true" class="editable-cell">Produit B</div>';
+                rows[1].cells[1].innerHTML = '<div contenteditable="true" class="editable-cell">149.99 €</div>';
+                rows[1].cells[2].innerHTML = '<div class="cell-checkbox"><input type="checkbox" checked> En stock</div>';
+                
+                // Troisième ligne avec une liste déroulante
+                rows[2].cells[0].innerHTML = '<div contenteditable="true" class="editable-cell">Produit C</div>';
+                rows[2].cells[1].innerHTML = '<div contenteditable="true" class="editable-cell" style="background-color: #ffe6e6;">79.99 €</div>';
+                rows[2].cells[2].innerHTML = '<select class="cell-select"><option>En préparation</option><option>Expédié</option><option>Livré</option></select>';
+            }
+        }
+
+        // ========================================
+        // GESTION DES LIGNES ET COLONNES
+        // ========================================
+        
+        /**
+         * Ajoute une nouvelle ligne à la fin du tableau
+         * Génère automatiquement les contrôles pour la nouvelle ligne
+         */
+        function addRow() {
+            console.log('➕ Ajout d\'une nouvelle ligne');
+            
+            const table = document.getElementById('dynamicTable');
+            const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
+            const headerCols = table.querySelectorAll('thead th').length;
+            
+            // Créer la nouvelle ligne
+            const newRow = document.createElement('tr');
+            newRow.style.position = 'relative';
+            
+            // Créer les cellules avec le bon nombre de colonnes
+            for (let i = 0; i < headerCols; i++) {
+                const cell = document.createElement('td');
+                cell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Cliquez pour éditer</div>';
+                newRow.appendChild(cell);
+            }
+            
+            // Ajouter les contrôles de ligne
+            addRowControls(newRow);
+            
+            tbody.appendChild(newRow);
+            
+            // Animation d'entrée
+            newRow.classList.add('slide-in');
+            
+            console.log('✅ Ligne ajoutée avec succès');
+        }
+
+        /**
+         * Ajoute une nouvelle colonne à droite du tableau
+         * Met à jour l'en-tête et toutes les lignes existantes
+         */
+        function addColumn() {
+            console.log('➕ Ajout d\'une nouvelle colonne');
+            
+            const table = document.getElementById('dynamicTable');
+            const thead = table.querySelector('thead tr');
+            const tbody = table.querySelector('tbody');
+            
+            // Compter les colonnes existantes
+            const currentCols = thead.children.length;
+            
+            // Ajouter l'en-tête de colonne
+            const headerCell = document.createElement('th');
+            headerCell.style.position = 'relative';
+            headerCell.textContent = `Colonne ${currentCols + 1}`;
+            
+            // Ajouter les contrôles de colonne
+            addColumnControls(headerCell, currentCols);
+            
+            thead.appendChild(headerCell);
+            
+            // Ajouter une cellule à chaque ligne existante
+            if (tbody) {
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cell = document.createElement('td');
+                    cell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Cliquez pour éditer</div>';
+                    row.appendChild(cell);
+                });
+            }
+            
+            console.log('✅ Colonne ajoutée avec succès');
+        }
+
+        /**
+         * Ajoute les boutons de contrôle pour une ligne donnée
+         * @param {HTMLElement} row - L'élément de ligne HTML
+         */
+        function addRowControls(row) {
+            const controls = document.createElement('div');
+            controls.className = 'row-controls';
+            
+            const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+            
+            controls.innerHTML = `
+                <button class="control-btn btn-success" onclick="insertRowBefore(${rowIndex})" title="Insérer avant">⬆️</button>
+                <button class="control-btn btn-success" onclick="insertRowAfter(${rowIndex})" title="Insérer après">⬇️</button>
+                <button class="control-btn btn-danger" onclick="deleteRow(${rowIndex})" title="Supprimer">❌</button>
+            `;
+            
+            row.appendChild(controls);
+        }
+
+        /**
+         * Ajoute les boutons de contrôle pour une colonne donnée
+         * @param {HTMLElement} header - L'élément d'en-tête de colonne
+         * @param {number} index - L'index de la colonne
+         */
+        function addColumnControls(header, index) {
+            const controls = document.createElement('div');
+            controls.className = 'column-controls';
+            
+            controls.innerHTML = `
+                <button class="control-btn btn-success" onclick="insertColumnBefore(${index})" title="Insérer avant">⬅️</button>
+                <button class="control-btn btn-success" onclick="insertColumnAfter(${index})" title="Insérer après">➡️</button>
+                <button class="control-btn btn-danger" onclick="deleteColumn(${index})" title="Supprimer">❌</button>
+            `;
+            
+            header.appendChild(controls);
+        }
+
+        // ========================================
+        // FONCTIONS D'INSERTION ET SUPPRESSION
+        // ========================================
+        
+        /**
+         * Insère une nouvelle ligne avant l'index spécifié
+         * @param {number} index - Position où insérer la ligne
+         */
+        function insertRowBefore(index) {
+            console.log(`📍 Insertion d'une ligne avant l'index ${index}`);
+            
+            const tbody = document.querySelector('#dynamicTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            const headerCols = document.querySelectorAll('#dynamicTable thead th').length;
+            
+            const newRow = document.createElement('tr');
+            newRow.style.position = 'relative';
+            
+            for (let i = 0; i < headerCols; i++) {
+                const cell = document.createElement('td');
+                cell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Nouvelle cellule</div>';
+                newRow.appendChild(cell);
+            }
+            
+            addRowControls(newRow);
+            tbody.insertBefore(newRow, rows[index]);
+            
+            // Mettre à jour les indices des contrôles
+            updateRowControlsIndices();
+        }
+
+        /**
+         * Insère une nouvelle ligne après l'index spécifié
+         * @param {number} index - Position après laquelle insérer la ligne
+         */
+        function insertRowAfter(index) {
+            console.log(`📍 Insertion d'une ligne après l'index ${index}`);
+            
+            const tbody = document.querySelector('#dynamicTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            const headerCols = document.querySelectorAll('#dynamicTable thead th').length;
+            
+            const newRow = document.createElement('tr');
+            newRow.style.position = 'relative';
+            
+            for (let i = 0; i < headerCols; i++) {
+                const cell = document.createElement('td');
+                cell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Nouvelle cellule</div>';
+                newRow.appendChild(cell);
+            }
+            
+            addRowControls(newRow);
+            
+            if (index + 1 < rows.length) {
+                tbody.insertBefore(newRow, rows[index + 1]);
+            } else {
+                tbody.appendChild(newRow);
+            }
+            
+            updateRowControlsIndices();
+        }
+
+        /**
+         * Supprime la ligne à l'index spécifié
+         * @param {number} index - Index de la ligne à supprimer
+         */
+        function deleteRow(index) {
+            const tbody = document.querySelector('#dynamicTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            if (rows.length > 1) { // Garder au moins une ligne
+                console.log(`🗑️ Suppression de la ligne ${index}`);
+                rows[index].remove();
+                updateRowControlsIndices();
+            } else {
+                alert('⚠️ Il doit y avoir au moins une ligne dans le tableau !');
+            }
+        }
+
+        /**
+         * Insère une nouvelle colonne avant l'index spécifié
+         * @param {number} index - Position où insérer la colonne
+         */
+        function insertColumnBefore(index) {
+            console.log(`📍 Insertion d'une colonne avant l'index ${index}`);
+            
+            const table = document.getElementById('dynamicTable');
+            const thead = table.querySelector('thead tr');
+            const tbody = table.querySelector('tbody');
+            
+            // Ajouter l'en-tête
+            const headerCell = document.createElement('th');
+            headerCell.style.position = 'relative';
+            headerCell.textContent = `Nouvelle Col`;
+            addColumnControls(headerCell, index);
+            thead.insertBefore(headerCell, thead.children[index]);
+            
+            // Ajouter des cellules à toutes les lignes
+            if (tbody) {
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cell = document.createElement('td');
+                    cell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Nouvelle cellule</div>';
+                    row.insertBefore(cell, row.children[index]);
+                });
+            }
+            
+            updateColumnControlsIndices();
+        }
+
+        /**
+         * Insère une nouvelle colonne après l'index spécifié
+         * @param {number} index - Position après laquelle insérer la colonne
+         */
+        function insertColumnAfter(index) {
+            console.log(`📍 Insertion d'une colonne après l'index ${index}`);
+            
+            const table = document.getElementById('dynamicTable');
+            const thead = table.querySelector('thead tr');
+            const tbody = table.querySelector('tbody');
+            
+            // Ajouter l'en-tête
+            const headerCell = document.createElement('th');
+            headerCell.style.position = 'relative';
+            headerCell.textContent = `Nouvelle Col`;
+            addColumnControls(headerCell, index + 1);
+            
+            if (index + 1 < thead.children.length) {
+                thead.insertBefore(headerCell, thead.children[index + 1]);
+            } else {
+                thead.appendChild(headerCell);
+            }
+            
+            // Ajouter des cellules à toutes les lignes
+            if (tbody) {
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cell = document.createElement('td');
+                    cell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Nouvelle cellule</div>';
+                    
+                    if (index + 1 < row.children.length) {
+                        row.insertBefore(cell, row.children[index + 1]);
+                    } else {
+                        row.appendChild(cell);
+                    }
+                });
+            }
+            
+            updateColumnControlsIndices();
+        }
+
+        /**
+         * Supprime la colonne à l'index spécifié
+         * @param {number} index - Index de la colonne à supprimer
+         */
+        function deleteColumn(index) {
+            const thead = document.querySelector('#dynamicTable thead tr');
+            const tbody = document.querySelector('#dynamicTable tbody');
+            
+            if (thead.children.length > 1) { // Garder au moins une colonne
+                console.log(`🗑️ Suppression de la colonne ${index}`);
+                
+                // Supprimer l'en-tête
+                thead.children[index].remove();
+                
+                // Supprimer les cellules de toutes les lignes
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        if (row.children[index]) {
+                            row.children[index].remove();
+                        }
+                    });
+                }
+                
+                updateColumnControlsIndices();
+            } else {
+                alert('⚠️ Il doit y avoir au moins une colonne dans le tableau !');
+            }
+        }
+
+        // ========================================
+        // FONCTIONS DE MISE À JOUR DES INDICES
+        // ========================================
+        
+        /**
+         * Met à jour les indices des contrôles de lignes après modification
+         */
+        function updateRowControlsIndices() {
+            const tbody = document.querySelector('#dynamicTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach((row, index) => {
+                const controls = row.querySelector('.row-controls');
+                if (controls) {
+                    controls.innerHTML = `
+                        <button class="control-btn btn-success" onclick="insertRowBefore(${index})" title="Insérer avant">⬆️</button>
+                        <button class="control-btn btn-success" onclick="insertRowAfter(${index})" title="Insérer après">⬇️</button>
+                        <button class="control-btn btn-danger" onclick="deleteRow(${index})" title="Supprimer">❌</button>
+                    `;
+                }
+            });
+        }
+
+        /**
+         * Met à jour les indices des contrôles de colonnes après modification
+         */
+        function updateColumnControlsIndices() {
+            const thead = document.querySelector('#dynamicTable thead tr');
+            const headers = thead.querySelectorAll('th');
+            
+            headers.forEach((header, index) => {
+                const controls = header.querySelector('.column-controls');
+                if (controls) {
+                    controls.innerHTML = `
+                        <button class="control-btn btn-success" onclick="insertColumnBefore(${index})" title="Insérer avant">⬅️</button>
+                        <button class="control-btn btn-success" onclick="insertColumnAfter(${index})" title="Insérer après">➡️</button>
+                        <button class="control-btn btn-danger" onclick="deleteColumn(${index})" title="Supprimer">❌</button>
+                    `;
+                }
+            });
+        }
+
+        // ========================================
+        // GESTION DE LA SÉLECTION DES CELLULES
+        // ========================================
+        
+        /**
+         * Sélectionne une cellule pour l'édition
+         * @param {HTMLElement} cell - La cellule à sélectionner
+         */
+        function selectCell(cell) {
+            console.log('🎯 Sélection d\'une cellule pour édition');
+            
+            // Désélectionner la cellule précédente
+            if (selectedCell) {
+                selectedCell.style.boxShadow = '';
+            }
+            
+            // Sélectionner la nouvelle cellule
+            selectedCell = cell;
+            cell.style.boxShadow = 'inset 0 0 0 3px #007bff';
+            
+            // Mettre le focus sur la cellule pour l'édition
+            cell.focus();
+        }
+
+        // ========================================
+        // FONCTIONS DE MISE EN FORME DU TEXTE
+        // ========================================
+        
+        /**
+         * Active/désactive le texte en gras pour la cellule sélectionnée
+         */
+        function toggleBold() {
+            if (selectedCell) {
+                console.log('🔤 Application du style gras');
+                const currentWeight = window.getComputedStyle(selectedCell).fontWeight;
+                selectedCell.style.fontWeight = (currentWeight === 'bold' || currentWeight === '700') ? 'normal' : 'bold';
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Active/désactive le texte en italique pour la cellule sélectionnée
+         */
+        function toggleItalic() {
+            if (selectedCell) {
+                console.log('🔤 Application du style italique');
+                const currentStyle = window.getComputedStyle(selectedCell).fontStyle;
+                selectedCell.style.fontStyle = (currentStyle === 'italic') ? 'normal' : 'italic';
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Change la couleur du texte de la cellule sélectionnée
+         * @param {string} color - La couleur au format hexadécimal
+         */
+        function changeTextColor(color) {
+            if (selectedCell) {
+                console.log(`🎨 Changement de couleur du texte : ${color}`);
+                selectedCell.style.color = color;
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Change la couleur de fond de la cellule sélectionnée
+         * @param {string} color - La couleur au format hexadécimal
+         */
+        function changeBgColor(color) {
+            if (selectedCell) {
+                console.log(`🎨 Changement de couleur de fond : ${color}`);
+                selectedCell.style.backgroundColor = color;
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Change la police de la cellule sélectionnée
+         * @param {string} fontFamily - Le nom de la police
+         */
+        function changeFontFamily(fontFamily) {
+            if (selectedCell) {
+                console.log(`🔤 Changement de police : ${fontFamily}`);
+                selectedCell.style.fontFamily = fontFamily;
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Change la taille de police de la cellule sélectionnée
+         * @param {string} fontSize - La taille de police (ex: "16px")
+         */
+        function changeFontSize(fontSize) {
+            if (selectedCell) {
+                console.log(`🔤 Changement de taille de police : ${fontSize}`);
+                selectedCell.style.fontSize = fontSize;
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        // ========================================
+        // INSERTION D'ÉLÉMENTS INTERACTIFS
+        // ========================================
+        
+        /**
+         * Insère une case à cocher dans la cellule sélectionnée
+         */
+        function insertCheckbox() {
+            if (selectedCell) {
+                console.log('☑️ Insertion d\'une case à cocher');
+                
+                const checkboxId = `checkbox_${elementIdCounter++}`;
+                const checkboxHtml = `
+                    <div class="cell-checkbox">
+                        <input type="checkbox" id="${checkboxId}">
+                        <label for="${checkboxId}" contenteditable="true">Option à cocher</label>
+                    </div>
+                `;
+                
+                selectedCell.innerHTML = checkboxHtml;
+                selectedCell.contentEditable = 'false'; // Désactiver l'édition directe
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Insère une liste déroulante dans la cellule sélectionnée
+         */
+        function insertDropdown() {
+            if (selectedCell) {
+                console.log('📋 Insertion d\'une liste déroulante');
+                
+                const selectId = `dropdown_${elementIdCounter++}`;
+                const dropdownHtml = `
+                    <select class="cell-select" id="${selectId}">
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                `;
+                
+                selectedCell.innerHTML = dropdownHtml;
+                selectedCell.contentEditable = 'false'; // Désactiver l'édition directe
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        // ========================================
+        // MODAL POUR OPTIONS AVANCÉES DES CELLULES
+        // ========================================
+        
+        /**
+         * Ouvre la modal des options avancées pour la cellule sélectionnée
+         */
+        function openCellOptions() {
+            if (selectedCell) {
+                console.log('⚙️ Ouverture des options avancées de cellule');
+                
+                const modal = document.getElementById('cellOptionsModal');
+                modal.style.display = 'block';
+                
+                // Réinitialiser les options
+                document.getElementById('cellType').value = 'text';
+                updateCellTypeOptions();
+            } else {
+                alert('⚠️ Veuillez d\'abord sélectionner une cellule !');
+            }
+        }
+
+        /**
+         * Ferme la modal des options de cellule
+         */
+        function closeCellOptions() {
+            console.log('❌ Fermeture des options de cellule');
+            document.getElementById('cellOptionsModal').style.display = 'none';
+        }
+
+        /**
+         * Met à jour l'affichage des options selon le type sélectionné
+         */
+        function updateCellTypeOptions() {
+            const cellType = document.getElementById('cellType').value;
+            
+            // Cacher toutes les options spécifiques
+            document.getElementById('checkboxOptions').style.display = 'none';
+            document.getElementById('dropdownOptions').style.display = 'none';
+            
+            // Afficher les options appropriées
+            if (cellType === 'checkbox') {
+                document.getElementById('checkboxOptions').style.display = 'block';
+            } else if (cellType === 'dropdown') {
+                document.getElementById('dropdownOptions').style.display = 'block';
+            }
+        }
+
+        /**
+         * Applique les options configurées dans la modal à la cellule sélectionnée
+         */
+        function applyCellOptions() {
+            if (!selectedCell) return;
+            
+            const cellType = document.getElementById('cellType').value;
+            console.log(`✨ Application des options de type : ${cellType}`);
+            
+            switch (cellType) {
+                case 'text':
+                    selectedCell.innerHTML = '<div contenteditable="true" class="editable-cell" onclick="selectCell(this)">Texte éditable</div>';
+                    selectedCell.contentEditable = 'true';
+                    break;
+                    
+                case 'checkbox':
+                    const checkboxText = document.getElementById('checkboxText').value || 'Case à cocher';
+                    const isChecked = document.getElementById('checkboxChecked').checked ? 'checked' : '';
+                    const checkboxId = `checkbox_${elementIdCounter++}`;
+                    
+                    selectedCell.innerHTML = `
+                        <div class="cell-checkbox">
+                            <input type="checkbox" id="${checkboxId}" ${isChecked}>
+                            <label for="${checkboxId}">${checkboxText}</label>
+                        </div>
+                    `;
+                    selectedCell.contentEditable = 'false';
+                    break;
+                    
+                case 'dropdown':
+                    const dropdownItems = document.getElementById('dropdownItems').value.split('\n').filter(item => item.trim());
+                    const selectId = `dropdown_${elementIdCounter++}`;
+                    
+                    let optionsHtml = '';
+                    dropdownItems.forEach(item => {
+                        optionsHtml += `<option value="${item.trim()}">${item.trim()}</option>`;
+                    });
+                    
+                    selectedCell.innerHTML = `<select class="cell-select" id="${selectId}">${optionsHtml}</select>`;
+                    selectedCell.contentEditable = 'false';
+                    break;
+                    
+                case 'number':
+                    selectedCell.innerHTML = '<input type="number" style="width: 100%; border: none; padding: 6px;" placeholder="Entrez un nombre">';
+                    selectedCell.contentEditable = 'false';
+                    break;
+                    
+                case 'date':
+                    selectedCell.innerHTML = '<input type="date" style="width: 100%; border: none; padding: 6px;">';
+                    selectedCell.contentEditable = 'false';
+                    break;
+            }
+            
+            closeCellOptions();
+        }
+
+        // ========================================
+        // FONCTION D'EXPORT DU TABLEAU
+        // ========================================
+        
+        /**
+         * Exporte le tableau au format CSV
+         * Collecte toutes les données et génère un fichier téléchargeable
+         */
+        function exportTable() {
+            console.log('💾 Début de l\'export du tableau');
+            
+            const table = document.getElementById('dynamicTable');
+            const rows = table.querySelectorAll('tr');
+            let csvContent = '';
+            
+            // Parcourir toutes les lignes
+            rows.forEach((row, rowIndex) => {
+                const cells = row.querySelectorAll('th, td');
+                const rowData = [];
+                
+                cells.forEach(cell => {
+                    // Extraire le contenu selon le type d'élément
+                    let cellContent = '';
+                    
+                    const checkbox = cell.querySelector('input[type="checkbox"]');
+                    const select = cell.querySelector('select');
+                    const input = cell.querySelector('input[type="number"], input[type="date"]');
+                    const editableDiv = cell.querySelector('.editable-cell');
+                    
+                    if (checkbox) {
+                        const label = cell.querySelector('label');
+                        cellContent = `${label ? label.textContent : 'Case'}: ${checkbox.checked ? 'Oui' : 'Non'}`;
+                    } else if (select) {
+                        cellContent = select.value || select.options[select.selectedIndex]?.text || '';
+                    } else if (input) {
+                        cellContent = input.value || '';
+                    } else if (editableDiv) {
+                        cellContent = editableDiv.textContent || '';
+                    } else {
+                        cellContent = cell.textContent || '';
+                    }
+                    
+                    // Nettoyer et échapper le contenu pour CSV
+                    cellContent = cellContent.replace(/"/g, '""'); // Échapper les guillemets
+                    rowData.push(`"${cellContent}"`);
+                });
+                
+                csvContent += rowData.join(',') + '\n';
+            });
+            
+            // Créer et télécharger le fichier
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `tableau_dynamique_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log('✅ Export terminé avec succès');
+            alert('📄 Tableau exporté avec succès !');
+        }
+
+        // ========================================
+        // GESTION DES ÉVÉNEMENTS GLOBAUX
+        // ========================================
+        
+        /**
+         * Gestionnaire pour fermer la modal en cliquant à l'extérieur
+         */
+        window.onclick = function(event) {
+            const modal = document.getElementById('cellOptionsModal');
+            if (event.target === modal) {
+                closeCellOptions();
+            }
+        };
+
+        /**
+         * Gestionnaire pour les raccourcis clavier
+         */
+        document.addEventListener('keydown', function(event) {
+            // Ctrl+B pour gras
+            if (event.ctrlKey && event.key === 'b') {
+                event.preventDefault();
+                toggleBold();
+            }
+            
+            // Ctrl+I pour italique
+            if (event.ctrlKey && event.key === 'i') {
+                event.preventDefault();
+                toggleItalic();
+            }
+            
+            // Escape pour fermer la modal
+            if (event.key === 'Escape') {
+                closeCellOptions();
+            }
+        });
+
+        // ========================================
+        // INITIALISATION AU CHARGEMENT DE LA PAGE
+        // ========================================
+        
+        /**
+         * Démarrer l'application une fois que le DOM est prêt
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌟 Application de tableau dynamique démarrée');
+            initializeTable();
+        });
+
+        // ========================================
+        // FONCTIONS UTILITAIRES SUPPLÉMENTAIRES
+        // ========================================
+        
+        /**
+         * Sauvegarde l'état actuel du tableau dans le localStorage
+         * Note: Cette fonction est commentée car localStorage n'est pas supporté dans l'environnement Claude
+         */
+        /*
+        function saveTableState() {
+            const tableHtml = document.getElementById('dynamicTable').outerHTML;
+            localStorage.setItem('dynamicTableState', tableHtml);
+            console.log('💾 État du tableau sauvegardé');
+        }
+        */
+
+        /**
+         * Charge l'état du tableau depuis le localStorage
+         * Note: Cette fonction est commentée car localStorage n'est pas supporté dans l'environnement Claude
+         */
+        /*
+        function loadTableState() {
+            const savedState = localStorage.getItem('dynamicTableState');
+            if (savedState) {
+                document.getElementById('dynamicTable').outerHTML = savedState;
+                console.log('📂 État du tableau chargé');
+            }
+        }
+        */
+
+        /**
+         * Fonction pour imprimer le tableau
+         */
+        function printTable() {
+            console.log('🖨️ Impression du tableau');
+            
+            const printWindow = window.open('', '_blank');
+            const tableHtml = document.getElementById('dynamicTable').outerHTML;
+            
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Impression du Tableau</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { border-collapse: collapse; width: 100%; }
+                        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; font-weight: bold; }
+                        .row-controls, .column-controls { display: none; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Tableau Dynamique</h1>
+                    <p>Généré le ${new Date().toLocaleDateString('fr-FR')}</p>
+                    ${tableHtml}
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        console.log('🎉 Toutes les fonctions du tableau dynamique sont initialisées !');
+    </script>
+</body>
+</html>
