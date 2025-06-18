@@ -63,3 +63,48 @@ Merci de votre visite et bonne exploration ! 🚀✨
 ---
 
 J'espère que cette version correspond mieux à vos attentes ! 😊
+
+<!DOCTYPE html>
+
+
+            <p>Ce tableau utilise <code>:hover</code> pour changer la couleur de fond d'une ligne lorsque la souris la survole.</p>
+            <details class="code-details">
+                <summary class="code-summary">Voir le code HTML</summary>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">HTML Code</span>
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <span class="copy-icon">&#x1F4CB;</span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code>&lt;table class="tableau4"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Nom&lt;/th&gt;
+        &lt;th&gt;Email&lt;/th&gt;
+        &lt;th&gt;Téléphone&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Jean Dupont&lt;/td&gt;
+        &lt;td&gt;jean.dupont@email.com&lt;/td&gt;
+        &lt;td&gt;01 23 45 67 89&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Marie Lambert&lt;/td&gt;
+        &lt;td&gt;marie.lambert@email.com&lt;/td&gt;
+        &lt;td&gt;06 12 34 56 78&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Paul Martin&lt;/td&gt;
+        &lt;td&gt;paul.martin@email.com&lt;/td&gt;
+        &lt;td&gt;07 65 43 21 09&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;              </code>
+
+                        </pre>
+                    </div>
+            </details>>
+
+            </div>
+
+</html>
