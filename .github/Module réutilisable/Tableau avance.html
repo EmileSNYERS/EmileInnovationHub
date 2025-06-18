@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<!-- 
+Titre : Cours sur les Tableaux HTML
+Description : Un guide complet pour apprendre à créer et styliser des tableaux en HTML.
+Auteur : Emile SNYERS avec de ChatGPT ou Claude IA
+Date de création : 2025-06-18
+Version : 1.0
+Licence : CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+Note : Toute utilisation de ce contenu doit obligatoirement mentionner le nom du créateur, Emile SNYERS.
+
+Title: HTML Tables Course
+Description: A complete guide to learning how to create and style tables in HTML.
+Author: Emile SNYERS with ChatGPT or Claude AI
+Creation Date: 2025-06-18
+Version: 1.0
+License: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+Note: Any use of this content must include attribution to the creator, Emile SNYERS.
+
+タイトル: HTML表の講座
+説明: HTMLで表を作成してスタイル設定する方法を学ぶための完全ガイド
+作者: Emile SNYERS with ChatGPT or Claude AI
+作成日: 2025-06-18
+バージョン: 1.0
+ライセンス: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+注意: このコンテンツを使用する場合は、必ず作成者であるEmile SNYERSの名前を明記してください。
+
+כותרת: קורס טבלאות HTML
+תיאור: מדריך מקיף ללמידה כיצד ליצור ולעצב טבלאות ב-HTML
+מחבר: Emile SNYERS עם ChatGPT או Claude AI
+תאריך יצירה: 2025-06-18
+גרסה: 1.0
+רישיון: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+הערה: כל שימוש בתוכן זה חייב לכלול ייחוס ליוצר, Emile SNYERS.
+-->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau d'inventaire informatique avancé</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .search-box, .filter-box, .add-item {
+            padding: 10px;
+        }
+        
+        .search-box input, .filter-box select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .add-item button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-item button:hover {
+            background-color: #219653;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        thead {
+            background-color: #34495e;
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        th:hover {
+            background-color: #2c3e50;
+        }
+        
+        th::after {
+            content: "↕";
+            position: absolute;
+            right: 10px;
+            opacity: 0.5;
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        
+        tbody tr:hover {
+            background-color: #ecf0f1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        
+        /* Styles spécifiques pour chaque type d'équipement */
+        tr.ordinateur {
+            border-left: 4px solid #3498db;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        tr.moniteur {
+            border-left: 4px solid #e74c3c;
+            font-family: 'Georgia', serif;
+        }
+        
+        tr.imprimante {
+            border-left: 4px solid #9b59b6;
+            font-family: 'Courier New', monospace;
+        }
+        
+        tr.reseau {
+            border-left: 4px solid #f39c12;
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+        
+        tr.peripherique {
+            border-left: 4px solid #1abc9c;
+            font-family: 'Verdana', sans-serif;
+        }
+        
+        /* Statut de disponibilité */
+        .statut {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .disponible {
+            background-color: #d5f5e3;
+            color: #27ae60;
+        }
+        
+        .attribue {
+            background-color: #fdebd0;
+            color: #f39c12;
+        }
+        
+        .maintenance {
+            background-color: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        /* Boutons d'action */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .btn-edit {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-info {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #7f8c8d;
+        }
+        
+        /* Menu déroulant pour l'attribution */
+        .attribution select {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        
+        /* Checkbox pour la sélection */
+        .selection input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Formulaire d'ajout caché */
+        .add-form {
+            display: none;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        .add-form.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .form-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-save {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-cancel {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        /* Animation pour les éléments qui apparaissent/disparaissent */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        
+        /* Tooltip pour les informations supplémentaires */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                min-width: 120px;
+            }
+        }
+        
+        /* Barre de progression pour le budget */
+        .progress-bar {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            transition: width 0.5s ease;
+        }
+        
+        /* Badge pour les notifications */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        /* Styles pour le mode sombre */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #34495e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 20px;
+        }
+        
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+        
+        body.dark-mode .container {
+            background-color: #34495e;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        body.dark-mode h1 {
+            color: #ecf0f1;
+        }
+        
+        body.dark-mode thead {
+            background-color: #1a2530;
+        }
+        
+        body.dark-mode tbody tr:nth-child(odd) {
+            background-color: #2c3e50;
+        }
+        
+        body.dark-mode tbody tr:nth-child(even) {
+            background-color: #34495e;
+        }
+        
+        body.dark-mode tbody tr:hover {
+            background-color: #3d566e;
+        }
+        
+        body.dark-mode .add-form {
+            background-color: #2c3e50;
+            border-color: #1a2530;
+        }
+        
+        /* Animation pour les lignes qui disparaissent */
+        tr.removing {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        /* Styles pour les notifications toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(20px);
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .toast.error {
+            background-color: #e74c3c;
+        }
+        
+        .toast.warning {
+            background-color: #f39c12;
+        }
+        
+        /* Styles pour les détails supplémentaires */
+        .details-row {
+            display: none;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+        
+        body.dark-mode .details-row {
+            background-color: #2c3e50;
+            border-color: #1a2530;
+        }
+        
+        .details-content {
+            padding: 15px;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .details-item {
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        body.dark-mode .details-item {
+            background-color: #34495e;
+        }
+        
+        .details-item h4 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        
+        body.dark-mode .details-item h4 {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
+    
+    <div class="container">
+        <h1>Inventaire du Matériel Informatique</h1>
+        
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Rechercher un équipement...">
+            </div>
+            
+            <div class="filter-box">
+                <select id="filterType">
+                    <option value="">Tous les types</option>
+                    <option value="ordinateur">Ordinateurs</option>
+                    <option value="moniteur">Moniteurs</option>
+                    <option value="imprimante">Imprimantes</option>
+                    <option value="reseau">Équipements réseau</option>
+                    <option value="peripherique">Périphériques</option>
+                </select>
+            </div>
+            
+            <div class="filter-box">
+                <select id="filterStatut">
+                    <option value="">Tous les statuts</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="attribue">Attribué</option>
+                    <option value="maintenance">En maintenance</option>
+                </select>
+            </div>
+            
+            <div class="add-item">
+                <button id="showAddForm">+ Ajouter un équipement</button>
+            </div>
+        </div>
+        
+        <div class="add-form" id="addForm">
+            <h3>Ajouter un nouvel équipement</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="newType">Type d'équipement</label>
+                    <select id="newType">
+                        <option value="ordinateur">Ordinateur</option>
+                        <option value="moniteur">Moniteur</option>
+                        <option value="imprimante">Imprimante</option>
+                        <option value="reseau">Équipement réseau</option>
+                        <option value="peripherique">Périphérique</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newNom">Nom de l'équipement</label>
+                    <input type="text" id="newNom" placeholder="Ex: Dell Latitude 7420">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newReference">Référence</label>
+                    <input type="text" id="newReference" placeholder="Ex: LAT-7420-001">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="newPrix">Prix (€)</label>
+                    <input type="number" id="newPrix" placeholder="Ex: 1200">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newQuantite">Quantité</label>
+                    <input type="number" id="newQuantite" placeholder="Ex: 1" min="1" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newStatut">Statut</label>
+                    <select id="newStatut">
+                        <option value="disponible">Disponible</option>
+                        <option value="attribue">Attribué</option>
+                        <option value="maintenance">En maintenance</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="newAttribution">Attribution</label>
+                    <select id="newAttribution">
+                        <option value="">Non attribué</option>
+                        <option value="Service Informatique">Service Informatique</option>
+                        <option value="Direction">Direction</option>
+                        <option value="Comptabilité">Comptabilité</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="RH">Ressources Humaines</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newDate">Date d'acquisition</label>
+                    <input type="date" id="newDate">
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn-cancel" id="cancelAdd">Annuler</button>
+                <button class="btn-save" id="saveAdd">Enregistrer</button>
+            </div>
+        </div>
+        
+        <table id="inventaireTable">
+            <thead>
+                <tr>
+                    <th class="selection"><input type="checkbox" id="selectAll"></th>
+                    <th data-sort="type">Type</th>
+                    <th data-sort="nom">Équipement</th>
+                    <th data-sort="reference">Référence</th>
+                    <th data-sort="prix">Prix</th>
+                    <th data-sort="quantite">Quantité</th>
+                    <th data-sort="statut">Statut</th>
+                    <th data-sort="attribution">Attribution</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="ordinateur">
+                    <td class="selection"><input type="checkbox" class="select-item"></td>
+                    <td>Ordinateur</td>
+                    <td>Dell Latitude 7420</td>
+                    <td>LAT-7420-001</td>
+                    <td>1299 €</td>
+                    <td>5</td>
+                    <td><span class="statut disponible">Disponible</span></td>
+                    <td class="attribution">
+                        <select>
+                            <option value="">Non attribué</option>
+                            <option value="Service Informatique">Service Informatique</option>
+                            <option value="Direction">Direction</option>
+                            <option value="Comptabilité">Comptabilité</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="RH">Ressources Humaines</option>
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-info show-details">Détails</button>
+                        <button class="btn btn-edit">Modifier</button>
+                        <button class="btn btn-delete">Supprimer</button>
+                    </td>
+                </tr>
+                <tr class="details-row">
+                    <td colspan="9">
+                        <div class="details-content">
+                            <div class="details-grid">
+                                <div class="details-item">
+                                    <h4>Spécifications</h4>
+                                    <p>Processeur: Intel Core i7-1185G7</p>
+                                    <p>RAM: 16 Go DDR4</p>
+                                    <p>Stockage: SSD 512 Go</p>
+                                    <p>OS: Windows 11 Pro</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Garantie</h4>
+                                    <p>Durée: 3 ans</p>
+                                    <p>Date d'expiration: 15/06/2026</p>
+                                    <p>Type: ProSupport Plus</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Historique</h4>
+                                    <p>Acquisition: 15/06/2023</p>
+                                    <p>Dernière maintenance: N/A</p>
+                                    <p>Incidents: 0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr class="moniteur">
+                    <td class="selection"><input type="checkbox" class="select-item"></td>
+                    <td>Moniteur</td>
+                    <td>Dell UltraSharp U2720Q</td>
+                    <td>U2720Q-002</td>
+                    <td>549 €</td>
+                    <td>8</td>
+                    <td><span class="statut attribue">Attribué</span></td>
+                    <td class="attribution">
+                        <select>
+                            <option value="">Non attribué</option>
+                            <option value="Service Informatique">Service Informatique</option>
+                            <option value="Direction" selected>Direction</option>
+                            <option value="Comptabilité">Comptabilité</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="RH">Ressources Humaines</option>
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-info show-details">Détails</button>
+                        <button class="btn btn-edit">Modifier</button>
+                        <button class="btn btn-delete">Supprimer</button>
+                    </td>
+                </tr>
+                <tr class="details-row">
+                    <td colspan="9">
+                        <div class="details-content">
+                            <div class="details-grid">
+                                <div class="details-item">
+                                    <h4>Spécifications</h4>
+                                    <p>Taille: 27 pouces</p>
+                                    <p>Résolution: 4K UHD (3840 x 2160)</p>
+                                    <p>Connectivité: HDMI, DisplayPort, USB-C</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Garantie</h4>
+                                    <p>Durée: 3 ans</p>
+                                    <p>Date d'expiration: 10/03/2026</p>
+                                    <p>Type: Standard</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Historique</h4>
+                                    <p>Acquisition: 10/03/2023</p>
+                                    <p>Dernière maintenance: N/A</p>
+                                    <p>Incidents: 0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr class="imprimante">
+                    <td class="selection"><input type="checkbox" class="select-item"></td>
+                    <td>Imprimante</td>
+                    <td>HP LaserJet Pro M404dn</td>
+                    <td>LJ-M404-003</td>
+                    <td>329 €</td>
+                    <td>3</td>
+                    <td><span class="statut maintenance">En maintenance</span></td>
+                    <td class="attribution">
+                        <select>
+                            <option value="">Non attribué</option>
+                            <option value="Service Informatique">Service Informatique</option>
+                            <option value="Direction">Direction</option>
+                            <option value="Comptabilité">Comptabilité</option>
+                            <option value="Marketing" selected>Marketing</option>
+                            <option value="RH">Ressources Humaines</option>
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-info show-details">Détails</button>
+                        <button class="btn btn-edit">Modifier</button>
+                        <button class="btn btn-delete">Supprimer</button>
+                    </td>
+                </tr>
+                <tr class="details-row">
+                    <td colspan="9">
+                        <div class="details-content">
+                            <div class="details-grid">
+                                <div class="details-item">
+                                    <h4>Spécifications</h4>
+                                    <p>Type: Laser monochrome</p>
+                                    <p>Vitesse: 38 ppm</p>
+                                    <p>Connectivité: Ethernet, USB</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Maintenance</h4>
+                                    <p>Problème: Bourrage papier récurrent</p>
+                                    <p>Date d'envoi: 05/06/2025</p>
+                                    <p>Date de retour prévue: 12/06/2025</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Consommables</h4>
+                                    <p>Toner: HP 59A (CF259A)</p>
+                                    <p>Niveau: 25%</p>
+                                    <p>Dernier remplacement: 15/04/2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr class="reseau">
+                    <td class="selection"><input type="checkbox" class="select-item"></td>
+                    <td>Réseau</td>
+                    <td>Cisco Catalyst 9200</td>
+                    <td>C9200-48P-004</td>
+                    <td>3499 €</td>
+                    <td>2</td>
+                    <td><span class="statut disponible">Disponible</span></td>
+                    <td class="attribution">
+                        <select>
+                            <option value="">Non attribué</option>
+                            <option value="Service Informatique" selected>Service Informatique</option>
+                            <option value="Direction">Direction</option>
+                            <option value="Comptabilité">Comptabilité</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="RH">Ressources Humaines</option>
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-info show-details">Détails</button>
+                        <button class="btn btn-edit">Modifier</button>
+                        <button class="btn btn-delete">Supprimer</button>
+                    </td>
+                </tr>
+                <tr class="details-row">
+                    <td colspan="9">
+                        <div class="details-content">
+                            <div class="details-grid">
+                                <div class="details-item">
+                                    <h4>Spécifications</h4>
+                                    <p>Ports: 48 ports PoE+ Gigabit Ethernet</p>
+                                    <p>Capacité: 176 Gbps</p>
+                                    <p>Gestion: Cisco IOS XE</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Emplacement</h4>
+                                    <p>Local: Salle serveur principale</p>
+                                    <p>Rack: R2, U10-11</p>
+                                    <p>Installation: 20/01/2025</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Support</h4>
+                                    <p>Contrat: SmartNet</p>
+                                    <p>Niveau: 24x7x4</p>
+                                    <p>Expiration: 20/01/2028</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr class="peripherique">
+                    <td class="selection"><input type="checkbox" class="select-item"></td>
+                    <td>Périphérique</td>
+                    <td>Logitech MX Master 3</td>
+                    <td>MX3-005</td>
+                    <td>99 €</td>
+                    <td>12</td>
+                    <td><span class="statut attribue">Attribué</span></td>
+                    <td class="attribution">
+                        <select>
+                            <option value="">Non attribué</option>
+                            <option value="Service Informatique">Service Informatique</option>
+                            <option value="Direction">Direction</option>
+                            <option value="Comptabilité">Comptabilité</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="RH" selected>Ressources Humaines</option>
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-info show-details">Détails</button>
+                        <button class="btn btn-edit">Modifier</button>
+                        <button class="btn btn-delete">Supprimer</button>
+                    </td>
+                </tr>
+                <tr class="details-row">
+                    <td colspan="9">
+                        <div class="details-content">
+                            <div class="details-grid">
+                                <div class="details-item">
+                                    <h4>Spécifications</h4>
+                                    <p>Type: Souris sans fil</p>
+                                    <p>Connectivité: Bluetooth, USB Unifying</p>
+                                    <p>DPI: 4000</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Attribution</h4>
+                                    <p>Service: Ressources Humaines</p>
+                                    <p>Utilisateurs: 12 personnes</p>
+                                    <p>Date d'attribution: 05/05/2025</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Accessoires</h4>
+                                    <p>Récepteur USB: Inclus</p>
+                                    <p>Câble de recharge: USB-C</p>
+                                    <p>Étui de transport: Non</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div id="toast" class="toast"></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Références aux éléments DOM
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const searchInput = document.getElementById('searchInput');
+            const filterType = document.getElementById('filterType');
+            const filterStatut = document.getElementById('filterStatut');
+            const showAddFormBtn = document.getElementById('showAddForm');
+            const addForm = document.getElementById('addForm');
+            const cancelAddBtn = document.getElementById('cancelAdd');
+            const saveAddBtn = document.getElementById('saveAdd');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const table = document.getElementById('inventaireTable');
+            const tbody = table.querySelector('tbody');
+            const toast = document.getElementById('toast');
+            
+            // Gestion du mode sombre
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+                
+                // Afficher une notification
+                showToast(document.body.classList.contains('dark-mode') ? 
+                    'Mode sombre activé' : 'Mode clair activé');
+            });
+            
+            // Recherche en temps réel
+            searchInput.addEventListener('input', filterTable);
+            
+            // Filtres par type et statut
+            filterType.addEventListener('change', filterTable);
+            filterStatut.addEventListener('change', filterTable);
+            
+            // Afficher/masquer le formulaire d'ajout
+            showAddFormBtn.addEventListener('click', function() {
+                addForm.classList.add('visible');
+            });
+            
+            cancelAddBtn.addEventListener('click', function() {
+                addForm.classList.remove('visible');
+                resetForm();
+            });
+            
+            // Sélection de toutes les lignes
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.select-item');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+                
+                // Mettre en évidence les lignes sélectionnées
+                const rows = document.querySelectorAll('tbody tr:not(.details-row)');
+                rows.forEach(row => {
+                    if (selectAllCheckbox.checked) {
+                        row.style.backgroundColor = '#e8f4fc';
+                    } else {
+                        row.style.backgroundColor = '';
+                    }
+                });
+            });
+            
+            // Tri des colonnes
+            const headers = table.querySelectorAll('th[data-sort]');
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    const column = this.dataset.sort;
+                    sortTable(column);
+                });
+            });
+            
+            // Ajouter un nouvel équipement
+            saveAddBtn.addEventListener('click', function() {
+                const type = document.getElementById('newType').value;
+                const nom = document.getElementById('newNom').value;
+                const reference = document.getElementById('newReference').value;
+                const prix = document.getElementById('newPrix').value;
+                const quantite = document.getElementById('newQuantite').value;
+                const statut = document.getElementById('newStatut').value;
+                const attribution = document.getElementById('newAttribution').value;
+                
+                // Validation simple
+                if (!nom || !reference || !prix || !quantite) {
+                    showToast('Veuillez remplir tous les champs obligatoires', 'error');
+                    return;
+                }
+                
+                // Créer une nouvelle ligne
+                const newRow = document.createElement('tr');
+                newRow.className = type;
+                
+                // Animation d'apparition
+                newRow.style.opacity = '0';
+                newRow.style.transform = 'translateY(-10px)';
+                
+                newRow.innerHTML = `
+                    <td class="selection"><input type="checkbox" class="select-item"></td>
+                    <td>${capitalizeFirstLetter(type)}</td>
+                    <td>${nom}</td>
+                    <td>${reference}</td>
+                    <td>${prix} €</td>
+                    <td>${quantite}</td>
+                    <td><span class="statut ${statut}">${getStatutLabel(statut)}</span></td>
+                    <td class="attribution">
+                        <select>
+                            <option value="">Non attribué</option>
+                            <option value="Service Informatique" ${attribution === 'Service Informatique' ? 'selected' : ''}>Service Informatique</option>
+                            <option value="Direction" ${attribution === 'Direction' ? 'selected' : ''}>Direction</option>
+                            <option value="Comptabilité" ${attribution === 'Comptabilité' ? 'selected' : ''}>Comptabilité</option>
+                            <option value="Marketing" ${attribution === 'Marketing' ? 'selected' : ''}>Marketing</option>
+                            <option value="RH" ${attribution === 'RH' ? 'selected' : ''}>Ressources Humaines</option>
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-info show-details">Détails</button>
+                        <button class="btn btn-edit">Modifier</button>
+                        <button class="btn btn-delete">Supprimer</button>
+                    </td>
+                `;
+                
+                // Créer la ligne de détails
+                const detailsRow = document.createElement('tr');
+                detailsRow.className = 'details-row';
+                detailsRow.innerHTML = `
+                    <td colspan="9">
+                        <div class="details-content">
+                            <div class="details-grid">
+                                <div class="details-item">
+                                    <h4>Spécifications</h4>
+                                    <p>Informations non disponibles</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Acquisition</h4>
+                                    <p>Date: ${new Date().toLocaleDateString()}</p>
+                                </div>
+                                <div class="details-item">
+                                    <h4>Notes</h4>
+                                    <p>Nouvel équipement ajouté à l'inventaire</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                
+                // Ajouter les lignes au tableau
+                tbody.appendChild(newRow);
+                tbody.appendChild(detailsRow);
+                
+                // Animation d'apparition
+                setTimeout(() => {
+                    newRow.style.opacity = '1';
+                    newRow.style.transform = 'translateY(0)';
+                    newRow.style.transition = 'opacity 0.5s, transform 0.5s';
+                }, 10);
+                
+                // Ajouter les écouteurs d'événements pour la nouvelle ligne
+                setupRowEventListeners(newRow, detailsRow);
+                
+                // Réinitialiser le formulaire et le masquer
+                resetForm();
+                addForm.classList.remove('visible');
+                
+                // Afficher une notification
+                showToast(`${nom} ajouté avec succès à l'inventaire`);
+            });
+            
+            // Configurer les écouteurs d'événements pour les lignes existantes
+            const rows = document.querySelectorAll('tbody tr:not(.details-row)');
+            rows.forEach(row => {
+                const detailsRow = row.nextElementSibling;
+                setupRowEventListeners(row, detailsRow);
+            });
+            
+            // Fonction pour configurer les écouteurs d'événements pour une ligne
+            function setupRowEventListeners(row, detailsRow) {
+                // Bouton de détails
+                const detailsBtn = row.querySelector('.show-details');
+                if (detailsBtn) {
+                    detailsBtn.addEventListener('click', function() {
+                        detailsRow.style.display = detailsRow.style.display === 'table-row' ? 'none' : 'table-row';
+                        
+                        // Animation
+                        if (detailsRow.style.display === 'table-row') {
+                            detailsRow.style.opacity = '0';
+                            setTimeout(() => {
+                                detailsRow.style.opacity = '1';
+                                detailsRow.style.transition = 'opacity 0.3s';
+                            }, 10);
+                        }
+                    });
+                }
+                
+                // Bouton de suppression
+                const deleteBtn = row.querySelector('.btn-delete');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', function() {
+                        // Animation de suppression
+                        row.classList.add('removing');
+                        
+                        // Supprimer après l'animation
+                        setTimeout(() => {
+                            row.remove();
+                            detailsRow.remove();
+                            showToast('Équipement supprimé de l\'inventaire');
+                        }, 500);
+                    });
+                }
+                
+                // Bouton de modification
+                const editBtn = row.querySelector('.btn-edit');
+                if (editBtn) {
+                    editBtn.addEventListener('click', function() {
+                        // Simuler une modification
+                        row.style.backgroundColor = '#fff3cd';
+                        setTimeout(() => {
+                            row.style.backgroundColor = '';
+                            showToast('Fonctionnalité de modification en cours de développement');
+                        }, 1000);
+                    });
+                }
+                
+                // Case à cocher
+                const checkbox = row.querySelector('.select-item');
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        row.style.backgroundColor = checkbox.checked ? '#e8f4fc' : '';
+                    });
+                }
+                
+                // Menu déroulant d'attribution
+                const select = row.querySelector('.attribution select');
+                if (select) {
+                    select.addEventListener('change', function() {
+                        const statut = row.querySelector('.statut');
+                        if (this.value) {
+                            statut.className = 'statut attribue';
+                            statut.textContent = 'Attribué';
+                            showToast(`Équipement attribué à ${this.value}`);
+                        } else {
+                            statut.className = 'statut disponible';
+                            statut.textContent = 'Disponible';
+                            showToast('Attribution supprimée');
+                        }
+                    });
+                }
+            }
+            
+            // Fonction pour filtrer le tableau
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const typeFilter = filterType.value;
+                const statutFilter = filterStatut.value;
+                
+                const rows = document.querySelectorAll('tbody tr:not(.details-row)');
+                
+                rows.forEach(row => {
+                    const detailsRow = row.nextElementSibling;
+                    
+                    // Vérifier le type
+                    const typeMatch = !typeFilter || row.classList.contains(typeFilter);
+                    
+                    // Vérifier le statut
+                    const statutElement = row.querySelector('.statut');
+                    const statutMatch = !statutFilter || (statutElement && statutElement.classList.contains(statutFilter));
+                    
+                    // Vérifier le terme de recherche
+                    const textContent = row.textContent.toLowerCase();
+                    const searchMatch = !searchTerm || textContent.includes(searchTerm);
+                    
+                    // Afficher ou masquer la ligne
+                    if (typeMatch && statutMatch && searchMatch) {
+                        row.style.display = '';
+                        // Masquer la ligne de détails associée si elle était visible
+                        if (detailsRow.style.display === 'table-row') {
+                            detailsRow.style.display = '';
+                        }
+                    } else {
+                        row.style.display = 'none';
+                        detailsRow.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Fonction pour trier le tableau
+            function sortTable(column) {
+                const rows = Array.from(tbody.querySelectorAll('tr:not(.details-row)'));
+                const direction = table.dataset.sortDirection === 'asc' ? 'desc' : 'asc';
+                
+                // Mettre à jour la direction de tri
+                table.dataset.sortDirection = direction;
+                table.dataset.sortColumn = column;
+                
+                // Trier les lignes
+                rows.sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    // Obtenir les valeurs à comparer
+                    switch (column) {
+                        case 'prix':
+                            aValue = parseFloat(a.cells[4].textContent);
+                            bValue = parseFloat(b.cells[4].textContent);
+                            break;
+                        case 'quantite':
+                            aValue = parseInt(a.cells[5].textContent);
+                            bValue = parseInt(b.cells[5].textContent);
+                            break;
+                        default:
+                            aValue = a.cells[getColumnIndex(column)].textContent.toLowerCase();
+                            bValue = b.cells[getColumnIndex(column)].textContent.toLowerCase();
+                    }
+                    
+                    // Comparer les valeurs
+                    if (direction === 'asc') {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+                
+                // Réorganiser les lignes
+                rows.forEach(row => {
+                    const detailsRow = row.nextElementSibling;
+                    tbody.appendChild(row);
+                    tbody.appendChild(detailsRow);
+                });
+                
+                // Mettre à jour les en-têtes
+                updateSortHeaders(column, direction);
+                
+                // Afficher une notification
+                showToast(`Tri par ${getColumnLabel(column)} (${direction === 'asc' ? 'croissant' : 'décroissant'})`);
+            }
+            
+            // Fonction pour obtenir l'index d'une colonne
+            function getColumnIndex(column) {
+                const headers = Array.from(table.querySelectorAll('th'));
+                for (let i = 0; i < headers.length; i++) {
+                    if (headers[i].dataset.sort === column) {
+                        return i;
+                    }
+                }
+                return 0;
+            }
+            
+            // Fonction pour obtenir le libellé d'une colonne
+            function getColumnLabel(column) {
+                const mapping = {
+                    'type': 'Type',
+                    'nom': 'Équipement',
+                    'reference': 'Référence',
+                    'prix': 'Prix',
+                    'quantite': 'Quantité',
+                    'statut': 'Statut',
+                    'attribution': 'Attribution'
+                };
+                return mapping[column] || column;
+            }
+            
+            // Fonction pour mettre à jour les en-têtes de tri
+            function updateSortHeaders(activeColumn, direction) {
+                const headers = table.querySelectorAll('th[data-sort]');
+                headers.forEach(header => {
+                    if (header.dataset.sort === activeColumn) {
+                        header.innerHTML = `${getColumnLabel(activeColumn)} ${direction === 'asc' ? '↑' : '↓'}`;
+                    } else {
+                        header.innerHTML = getColumnLabel(header.dataset.sort);
+                        header.innerHTML += '<span style="opacity: 0.5;">↕</span>';
+                    }
+                });
+            }
+            
+            // Fonction pour afficher une notification toast
+            function showToast(message, type = 'success') {
+                toast.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Fonction pour réinitialiser le formulaire
+            function resetForm() {
+                document.getElementById('newNom').value = '';
+                document.getElementById('newReference').value = '';
+                document.getElementById('newPrix').value = '';
+                document.getElementById('newQuantite').value = '1';
+                document.getElementById('newDate').value = '';
+            }
+            
+            // Fonction pour mettre en majuscule la première lettre
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+            
+            // Fonction pour obtenir le libellé d'un statut
+            function getStatutLabel(statut) {
+                const mapping = {
+                    'disponible': 'Disponible',
+                    'attribue': 'Attribué',
+                    'maintenance': 'En maintenance'
+                };
+                return mapping[statut] || statut;
+            }
+            
+            // Initialiser le tableau avec quelques animations
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(-10px)';
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                    row.style.transition = 'opacity 0.3s, transform 0.3s';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
