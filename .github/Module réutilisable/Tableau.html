@@ -4,6 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cours sur les Tableaux HTML</title>
+    <!-- 
+    Titre : Cours sur les Tableaux HTML
+    Description : Un guide complet pour apprendre à créer et styliser des tableaux en HTML.
+    Auteur : Emile SNYERS avec de ChatGPT ou claude IA
+    Date de création : 2025-06-18
+    Version : 1.0
+    Licence : CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+    
+    Title: HTML Tables Course
+    Description: A complete guide to learning how to create and style tables in HTML.
+    Author: Emile SNYERS with ChatGPT or Claude AI
+    Creation Date: 2025-06-18
+    Version: 1.0
+    License: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+    
+    タイトル: HTML表の講座
+    説明: HTMLで表を作成してスタイル設定する方法を学ぶための完全ガイド
+    作者: Emile SNYERS with ChatGPT or Claude AI
+    作成日: 2025-06-18
+    バージョン: 1.0
+    ライセンス: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+    
+    כותרת: קורס טבלאות HTML
+    תיאור: מדריך מקיף ללמידה כיצד ליצור ולעצב טבלאות ב-HTML
+    מחבר: Emile SNYERS עם ChatGPT או Claude AI
+    תאריך יצירה: 2025-06-18
+    גרסה: 1.0
+    רישיון: CC BY-NC-SA 4.0 (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International)
+    -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -181,6 +210,72 @@
             border-left: 4px solid #3498db;
             padding-left: 15px;
         }
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            font-family: monospace;
+        }
+        
+        .code-title {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(145deg, #2a6af0, #4c8aff);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(145deg, #1c5cd0, #3a78e9);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .code-block {
+            margin: 0;
+            padding: 15px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .code-block code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+        }
     </style>
 </head>
 <body>
@@ -258,14 +353,14 @@
                     <th>Âge</th>
                 </tr>
                 <tr>
-                    <td>Dupont</td>
-                    <td>Jean</td>
+                    <td>Emile</td>
+                    <td>SNYERS</td>
                     <td>25</td>
                 </tr>
                 <tr>
                     <td>Martin</td>
                     <td>Sophie</td>
-                    <td>22</td>
+                    <td>35</td>
                 </tr>
                 <tr>
                     <td>Bernard</td>
@@ -274,6 +369,79 @@
                 </tr>
             </table>
             <p>Ce tableau simple utilise <code>&lt;th&gt;</code> pour les en-têtes et <code>&lt;td&gt;</code> pour les données. Les bordures sont ajoutées avec CSS.</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-title">HTML Code</span>
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <span class="copy-icon">&#x1F4CB;</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="code-block">
+                    <code>&lt;table class="tableau1"&gt;
+    &lt;caption&gt;Liste des étudiants&lt;/caption&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Nom&lt;/th&gt;
+        &lt;th&gt;Prénom&lt;/th&gt;
+        &lt;th&gt;Âge&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Emile&lt;/td&gt;
+        &lt;td&gt;SNYERS&lt;/td&gt;
+        &lt;td&gt;25&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Martin&lt;/td&gt;
+        &lt;td&gt;Sophie&lt;/td&gt;
+        &lt;td&gt;22&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Bernard&lt;/td&gt;
+        &lt;td&gt;Michel&lt;/td&gt;
+        &lt;td&gt;28&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+
+            
+            <script>
+                function copyCode(btn) {
+                    const codeBlock = btn.closest('.code-container').querySelector('code');
+                    const textArea = document.createElement('textarea');
+                    textArea.value = codeBlock.textContent;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    const originalText = btn.querySelector('.copy-text').textContent;
+                    btn.querySelector('.copy-text').textContent = 'Copied!';
+                    setTimeout(() => {
+                        btn.querySelector('.copy-text').textContent = originalText;
+                    }, 2000);
+                }
+            </script>
+            <p>La structure d'un tableau HTML peut être visualisée comme une <strong>organisation en "couches"</strong>. D'abord, tout tableau commence par la balise <code>&lt;table&gt;</code>.</p>
+            
+            <p>À l'intérieur, nous créons des <u>lignes horizontales</u> avec <code>&lt;tr&gt;</code> (table row). Chaque ligne contient ensuite plusieurs cellules qui représentent les colonnes.</p>
+            
+            <p style="color: #3498db;">Imaginez un tableau comme une grille :</p>
+            <ul>
+                <li>Chaque <code>&lt;tr&gt;</code> crée une nouvelle ligne horizontale</li>
+                <li>À l'intérieur de cette ligne, chaque <code>&lt;td&gt;</code> ou <code>&lt;th&gt;</code> crée une cellule qui s'affiche côte à côte</li>
+            </ul>
+            
+            <p><em>En résumé</em>, on emboîte les éléments :</p>
+            <p style="color: #e74c3c; font-weight: bold; margin-left: 20px;">Le tableau contient des lignes, et chaque ligne contient des cellules (colonnes).</p>
+            
+            <p>Cette structure imbriquée permet d'organiser les données en rangées et colonnes parfaitement alignées.</p>
+            <p>Note: Utilisez <code>&lt;caption&gt;</code> pour ajouter un titre descriptif au tableau.</p>
+            <p>Note: Utilisez <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, et <code>&lt;tfoot&gt;</code> pour structurer les tableaux plus complexes.</p>
+            <p>Note: Utilisez <code>colspan</code> et <code>rowspan</code> pour fusionner des cellules.</p>
+            <p>Note: Utilisez <code>scope</code> pour indiquer si une cellule est un en-tête de ligne ou de colonne.</p>
+
+        
         </div>
         
         <div class="exemple">
@@ -307,6 +475,45 @@
                 </tr>
             </table>
             <p>Ce tableau utilise la pseudo-classe <code>:nth-child(even)</code> pour colorer une ligne sur deux, améliorant ainsi la lisibilité.</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-title">HTML Code</span>
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <span class="copy-icon">&#x1F4CB;</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                </div>
+                <pre class="code-block"><code>&lt;table class="tableau2"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Produit&lt;/th&gt;
+        &lt;th&gt;Prix&lt;/th&gt;
+        &lt;th&gt;Stock&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Ordinateur portable&lt;/td&gt;
+        &lt;td&gt;999 €&lt;/td&gt;
+        &lt;td&gt;15&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Smartphone&lt;/td&gt;
+        &lt;td&gt;599 €&lt;/td&gt;
+        &lt;td&gt;32&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Tablette&lt;/td&gt;
+        &lt;td&gt;349 €&lt;/td&gt;
+        &lt;td&gt;8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Écran 24"&lt;/td&gt;
+        &lt;td&gt;199 €&lt;/td&gt;
+        &lt;td&gt;23&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+
+                
+
         </div>
         
         <div class="exemple">
