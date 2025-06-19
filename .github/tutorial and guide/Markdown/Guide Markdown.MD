@@ -1,6 +1,8 @@
 # Cours sur le Markdown : Documentation et Utilisation
 
-Bonjour Émile ! Je vais vous proposer un cours complet sur le format Markdown, en commençant par les bases et en progressant vers des concepts plus avancés. Ce cours inclura de nombreux exemples, notamment autour du thème du suivi de progression de projet.
+Bonjour ! 
+Je vais vous proposer un cours complet sur le format Markdown, en commençant par les bases et en progressant vers des concepts plus avancés. 
+Ce cours inclura de nombreux exemples, notamment autour du thème du suivi de progression de projet.
 
 ## Introduction au Markdown
 
