@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide des licences Creative Commons pour l'enseignement</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Guide des licences Creative Commons</h1>
+            <p class="subtitle">Comprendre et utiliser les licences libres dans un contexte éducatif</p>
+        </div>
+    </header>
+
+    <nav class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <button id="backToTop" class="btn btn-primary" title="Retour en haut de page">↑</button>
+    </nav>
+
+    <div class="settings-panel">
+        <div class="settings-toggle" id="settingsToggle">⚙️</div>
+        <div class="settings-content">
+            <h3>Paramètres d'affichage</h3>
+            <div class="font-size-controls">
+                <button id="decreaseFont" class="btn btn-sm">A-</button>
+                <button id="resetFont" class="btn btn-sm">A</button>
+                <button id="increaseFont" class="btn btn-sm">A+</button>
+            </div>
+            <div class="theme-controls">
+                <button class="theme-btn" data-theme="light">Clair</button>
+                <button class="theme-btn" data-theme="dark">Sombre</button>
+                <button class="theme-btn" data-theme="high-contrast">Contraste élevé</button>
+                <button class="theme-btn" data-theme="sepia">Sépia</button>
+            </div>
+            <div class="font-controls">
+                <button class="font-btn" data-font="serif">Serif</button>
+                <button class="font-btn" data-font="sans-serif">Sans-serif</button>
+                <button class="font-btn" data-font="dyslexic">Dyslexie</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <aside class="table-of-contents">
+            <h2>Sommaire</h2>
+            <ul>
+                <li><a href="#introduction">1. Introduction aux licences Creative Commons</a></li>
+                <li><a href="#types-licences">2. Les différents types de licences CC</a>
+                    <ul>
+                        <li><a href="#cc-by">2.1. CC BY (Attribution)</a></li>
+                        <li><a href="#cc-by-sa">2.2. CC BY-SA (Attribution - Partage dans les Mêmes Conditions)</a></li>
+                        <li><a href="#cc-by-nd">2.3. CC BY-ND (Attribution - Pas de Modification)</a></li>
+                        <li><a href="#cc-by-nc">2.4. CC BY-NC (Attribution - Pas d'Utilisation Commerciale)</a></li>
+                        <li><a href="#cc-by-nc-sa">2.5. CC BY-NC-SA (Attribution - Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions)</a></li>
+                        <li><a href="#cc-by-nc-nd">2.6. CC BY-NC-ND (Attribution - Pas d'Utilisation Commerciale - Pas de Modification)</a></li>
+                        <li><a href="#cc-zero">2.7. CC0 (Domaine Public)</a></li>
+                    </ul>
+                </li>
+                <li><a href="#versions">3. Les versions des licences CC</a></li>
+                <li><a href="#utilisation">4. Comment utiliser les licences CC</a>
+                    <ul>
+                        <li><a href="#utilisation-site">4.1. Pour un site web éducatif</a></li>
+                        <li><a href="#utilisation-cours">4.2. Pour des ressources pédagogiques</a></li>
+                    </ul>
+                </li>
+                <li><a href="#exemple-by-sa">5. Focus sur la licence CC BY-SA 3.0</a></li>
+                <li><a href="#ressources">6. Ressources et outils utiles</a></li>
+            </ul>
+        </aside>
+
+        <main>
+            <section id="introduction">
+                <h2>1. Introduction aux licences Creative Commons</h2>
+                <div class="content-box">
+                    <p>Les licences Creative Commons (CC) sont des outils juridiques permettant aux créateurs de contenus de partager leurs œuvres tout en conservant certains droits. Elles offrent une alternative au copyright traditionnel ("tous droits réservés") en proposant une approche "certains droits réservés".</p>
+                    
+                    <div class="info-card">
+                        <h3>Pourquoi utiliser les licences CC dans l'éducation ?</h3>
+                        <ul>
+                            <li>Faciliter le partage légal de ressources pédagogiques</li>
+                            <li>Favoriser la collaboration entre enseignants</li>
+                            <li>Enrichir les supports de cours avec des contenus libres</li>
+                            <li>Sensibiliser les élèves aux questions de droit d'auteur</li>
+                            <li>Contribuer à la démocratisation du savoir</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Les licences CC reposent sur quatre éléments fondamentaux qui peuvent être combinés pour créer différents types de licences :</p>
+                    
+                    <div class="elements-grid">
+                        <div class="element">
+                            <h4>BY (Attribution)</h4>
+                            <p>Obligation de citer l'auteur original de l'œuvre.</p>
+                        </div>
+                        <div class="element">
+                            <h4>SA (Share Alike - Partage dans les Mêmes Conditions)</h4>
+                            <p>Les œuvres dérivées doivent être partagées sous la même licence que l'œuvre originale.</p>
+                        </div>
+                        <div class="element">
+                            <h4>NC (Non-Commercial - Pas d'Utilisation Commerciale)</h4>
+                            <p>L'œuvre ne peut pas être utilisée à des fins commerciales.</p>
+                        </div>
+                        <div class="element">
+                            <h4>ND (No Derivatives - Pas de Modification)</h4>
+                            <p>L'œuvre ne peut pas être modifiée ou adaptée.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="types-licences">
+                <h2>2. Les différents types de licences CC</h2>
+                
+                <div class="content-box" id="cc-by">
+                    <h3>2.1. CC BY (Attribution)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC BY</span>
+                            <h4>Attribution</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>La plus permissive des licences CC</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Partager et distribuer l'œuvre</li>
+                                        <li>Modifier et adapter l'œuvre</li>
+                                        <li>Utilisation commerciale</li>
+                                    </ul>
+                                </div>
+                                <div class="conditions">
+                                    <h5>À condition de</h5>
+                                    <ul>
+                                        <li>Créditer l'auteur original (nom, titre de l'œuvre, lien vers la licence)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Un professeur peut utiliser une image sous licence CC BY dans son cours, la modifier selon ses besoins, et la partager avec ses élèves ou collègues, à condition de citer l'auteur original.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box" id="cc-by-sa">
+                    <h3>2.2. CC BY-SA (Attribution - Partage dans les Mêmes Conditions)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC BY-SA</span>
+                            <h4>Attribution - Partage dans les Mêmes Conditions</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>Licence favorisant le partage collaboratif</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Partager et distribuer l'œuvre</li>
+                                        <li>Modifier et adapter l'œuvre</li>
+                                        <li>Utilisation commerciale</li>
+                                    </ul>
+                                </div>
+                                <div class="conditions">
+                                    <h5>À condition de</h5>
+                                    <ul>
+                                        <li>Créditer l'auteur original</li>
+                                        <li>Partager toute œuvre dérivée sous la même licence</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Un enseignant peut adapter un cours sous licence CC BY-SA pour ses propres besoins, mais s'il partage cette adaptation avec d'autres, il doit la publier sous la même licence CC BY-SA.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box" id="cc-by-nd">
+                    <h3>2.3. CC BY-ND (Attribution - Pas de Modification)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC BY-ND</span>
+                            <h4>Attribution - Pas de Modification</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>Licence préservant l'intégrité de l'œuvre</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Partager et distribuer l'œuvre intégrale</li>
+                                        <li>Utilisation commerciale</li>
+                                    </ul>
+                                </div>
+                                <div class="conditions">
+                                    <h5>À condition de</h5>
+                                    <ul>
+                                        <li>Créditer l'auteur original</li>
+                                        <li>Ne pas modifier l'œuvre</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Un professeur peut partager un article scientifique sous licence CC BY-ND avec ses élèves, mais ne peut pas le modifier ou l'adapter, même pour des besoins pédagogiques.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box" id="cc-by-nc">
+                    <h3>2.4. CC BY-NC (Attribution - Pas d'Utilisation Commerciale)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC BY-NC</span>
+                            <h4>Attribution - Pas d'Utilisation Commerciale</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>Licence limitant l'exploitation commerciale</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Partager et distribuer l'œuvre</li>
+                                        <li>Modifier et adapter l'œuvre</li>
+                                    </ul>
+                                </div>
+                                <div class="conditions">
+                                    <h5>À condition de</h5>
+                                    <ul>
+                                        <li>Créditer l'auteur original</li>
+                                        <li>Ne pas utiliser l'œuvre à des fins commerciales</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Un enseignant peut utiliser et adapter des ressources sous licence CC BY-NC pour ses cours dans un établissement public, mais ne pourrait pas les intégrer dans un manuel scolaire commercialisé.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box" id="cc-by-nc-sa">
+                    <h3>2.5. CC BY-NC-SA (Attribution - Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC BY-NC-SA</span>
+                            <h4>Attribution - Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>Licence combinant restrictions commerciales et partage collaboratif</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Partager et distribuer l'œuvre</li>
+                                        <li>Modifier et adapter l'œuvre</li>
+                                    </ul>
+                                </div>
+                                <div class="conditions">
+                                    <h5>À condition de</h5>
+                                    <ul>
+                                        <li>Créditer l'auteur original</li>
+                                        <li>Ne pas utiliser l'œuvre à des fins commerciales</li>
+                                        <li>Partager toute œuvre dérivée sous la même licence</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Un professeur peut adapter des ressources pédagogiques sous cette licence pour ses propres cours et les partager avec d'autres enseignants, mais tous doivent respecter les mêmes conditions (pas d'usage commercial et partage sous la même licence).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box" id="cc-by-nc-nd">
+                    <h3>2.6. CC BY-NC-ND (Attribution - Pas d'Utilisation Commerciale - Pas de Modification)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC BY-NC-ND</span>
+                            <h4>Attribution - Pas d'Utilisation Commerciale - Pas de Modification</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>La licence CC la plus restrictive</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Partager et distribuer l'œuvre intégrale</li>
+                                    </ul>
+                                </div>
+                                <div class="conditions">
+                                    <h5>À condition de</h5>
+                                    <ul>
+                                        <li>Créditer l'auteur original</li>
+                                        <li>Ne pas utiliser l'œuvre à des fins commerciales</li>
+                                        <li>Ne pas modifier l'œuvre</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Un professeur peut partager un document sous cette licence avec ses élèves, mais ne peut ni le modifier ni l'intégrer dans des supports commerciaux.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box" id="cc-zero">
+                    <h3>2.7. CC0 (Domaine Public)</h3>
+                    <div class="licence-card">
+                        <div class="licence-header">
+                            <span class="licence-icon">CC0</span>
+                            <h4>Domaine Public</h4>
+                        </div>
+                        <div class="licence-content">
+                            <p><strong>Renonciation complète aux droits d'auteur</strong></p>
+                            <div class="permissions">
+                                <div class="allowed">
+                                    <h5>Autorise</h5>
+                                    <ul>
+                                        <li>Toute utilisation sans aucune restriction</li>
+                                        <li>Aucune obligation de citer l'auteur (bien que ce soit toujours apprécié)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <p><strong>Exemple d'utilisation dans un contexte éducatif :</strong> Une base de données de faits historiques sous CC0 peut être librement utilisée, modifiée et intégrée dans n'importe quel support pédagogique sans aucune restriction.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="versions">
+                <h2>3. Les versions des licences CC</h2>
+                <div class="content-box">
+                    <p>Les licences Creative Commons ont évolué au fil du temps pour s'adapter aux changements juridiques et aux besoins des utilisateurs. Chaque version est identifiée par un numéro (par exemple, 3.0, 4.0).</p>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">2002</div>
+                            <div class="timeline-content">
+                                <h4>Version 1.0</h4>
+                                <p>Première version des licences CC</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2004</div>
+                            <div class="timeline-content">
+                                <h4>Version 2.0</h4>
+                                <p>Clarification des termes et amélioration de l'interopérabilité</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2007</div>
+                            <div class="timeline-content">
+                                <h4>Version 3.0</h4>
+                                <p>Introduction des versions "portées" adaptées aux juridictions nationales</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2013</div>
+                            <div class="timeline-content">
+                                <h4>Version 4.0</h4>
+                                <p>Version internationale unique, meilleure compatibilité avec les bases de données et clarification des droits</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h4>Différences principales entre les versions</h4>
+                        <ul>
+                            <li>La version 4.0 est conçue pour être applicable internationalement sans adaptation</li>
+                            <li>Les versions récentes offrent une meilleure protection pour les bases de données</li>
+                            <li>Les versions plus récentes clarifient les droits moraux et autres droits connexes</li>
+                            <li>La version 4.0 facilite la correction des violations de licence</li>
+                        </ul>
+                        <p><strong>Conseil :</strong> Pour les nouveaux contenus, il est généralement recommandé d'utiliser la version 4.0, qui est la plus récente et la plus adaptée au contexte numérique international actuel.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="utilisation">
+                <h2>4. Comment utiliser les licences CC</h2>
+                
+                <div class="content-box" id="utilisation-site">
+                    <h3>4.1. Pour un site web éducatif</h3>
+                    
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Choisir la licence appropriée</h4>
+                                <p>Déterminez le niveau de partage et de protection souhaité pour votre contenu. Pour un site éducatif non lucratif, les licences CC BY ou CC BY-SA sont souvent appropriées car elles favorisent le partage tout en garantissant l'attribution.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Appliquer la licence à votre site</h4>
+                                <p>Ajoutez une mention claire de la licence dans le pied de page de votre site et/ou sur une page dédiée aux mentions légales. Exemple :</p>
+                                <div class="code-example">
+                                    <p>© [Année] [Nom du professeur]. Sauf mention contraire, le contenu de ce site est mis à disposition selon les termes de la licence <a href="https://creativecommons.org/licenses/by/4.0/deed.fr">Creative Commons Attribution 4.0 International (CC BY 4.0)</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Inclure les icônes et liens</h4>
+                                <p>Intégrez les icônes officielles de la licence choisie, disponibles sur le site de Creative Commons, avec un lien vers le texte complet de la licence.</p>
+                                <div class="code-example">
+                                    <p>Exemple de code HTML pour une licence CC BY :</p>
+                                    <pre>&lt;a rel="license" href="http://creativecommons.org/licenses/by/4.0/"&gt;
+&lt;img alt="Licence Creative Commons" style="border-width:0" 
+src="https://i.creativecommons.org/l/by/4.0/88x31.png" /&gt;&lt;/a&gt;</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Préciser les exceptions</h4>
+                                <p>Si certains contenus de votre site sont soumis à des licences différentes (par exemple, des images provenant d'autres sources), indiquez-le clairement à proximité de ces contenus.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-box" id="utilisation-cours">
+                    <h3>4.2. Pour des ressources pédagogiques</h3>
+                    
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Marquer vos propres ressources</h4>
+                                <p>Pour les documents que vous créez (présentations, fiches, exercices), ajoutez une mention claire de la licence choisie, idéalement sur la première et/ou dernière page.</p>
+                                <div class="example-box">
+                                    <p>Exemple pour un document pédagogique :</p>
+                                    <p>"La Révolution française : chronologie et acteurs clés" par [Nom du professeur], [Année].<br>
+                                    Ce document est mis à disposition selon les termes de la licence Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0 International (CC BY-SA 4.0).</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Utiliser correctement les ressources externes</h4>
+                                <p>Lorsque vous intégrez des contenus sous licence CC dans vos cours :</p>
+                                <ul>
+                                    <li>Citez toujours l'auteur original et la source</li>
+                                    <li>Mentionnez la licence sous laquelle le contenu est disponible</li>
+                                    <li>Incluez un lien vers la licence complète si possible</li>
+                                </ul>
+                                <div class="example-box">
+                                    <p>Exemple de citation pour une image :</p>
+                                    <p>"Carte de l'Europe après le Congrès de Vienne" par Jean Dupont, disponible sous licence CC BY 4.0 sur [URL de la source].</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Respecter les restrictions</h4>
+                                <p>Assurez-vous de respecter toutes les conditions de la licence :</p>
+                                <ul>
+                                    <li>Ne pas modifier un contenu sous licence ND</li>
+                                    <li>Ne pas utiliser commercialement un contenu sous licence NC</li>
+                                    <li>Appliquer la même licence aux œuvres dérivées pour les contenus sous licence SA</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exemple-by-sa">
+                <h2>5. Focus sur la licence CC BY-SA 3.0</h2>
+                <div class="content-box">
+                    <div class="focus-box">
+                        <h3>Comprendre la licence CC BY-SA 3.0</h3>
+                        <p>La licence Creative Commons Attribution - Partage dans les Mêmes Conditions 3.0 (CC BY-SA 3.0) est une licence qui permet une grande liberté d'utilisation tout en garantissant que les adaptations restent dans le même écosystème de partage.</p>
+                        
+                        <div class="permissions-grid">
+                            <div class="permission-item allowed">
+                                <h4>Vous pouvez</h4>
+                                <ul>
+                                    <li>Copier et redistribuer le matériel sous n'importe quel format ou médium</li>
+                                    <li>Adapter, remixer, transformer et créer à partir du matériel</li>
+                                    <li>Utiliser le matériel à des fins commerciales</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="permission-item conditions">
+                                <h4>À condition de</h4>
+                                <ul>
+                                    <li><strong>Attribution</strong> — Vous devez créditer l'œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées. Vous devez indiquer ces informations par tous les moyens raisonnables, sans suggérer que l'auteur vous soutient ou soutient la façon dont vous avez utilisé son œuvre.</li>
+                                    <li><strong>Partage dans les Mêmes Conditions</strong> — Si vous remixez, transformez ou créez à partir du matériel, vous devez diffuser votre contribution sous la même licence que l'original.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="example-usage">
+                            <h4>Application pratique pour un cours</h4>
+                            <p>Si vous souhaitez utiliser une image sous licence CC BY-SA 3.0 dans votre cours d'histoire-géographie :</p>
+                            
+                            <div class="steps-list">
+                                <div class="step-item">
+                                    <span class="step-marker">1</span>
+                                    <p><strong>Utilisation directe</strong> : Vous pouvez intégrer l'image dans votre support de cours sans demander d'autorisation préalable.</p>
+                                </div>
+                                
+                                <div class="step-item">
+                                    <span class="step-marker">2</span>
+                                    <strong>Attribution correcte</strong> : Vous devez mentionner sous l'image :
+                                    <ul>
+                                        <li>Le nom de l'auteur original</li>
+                                        <li>Le titre de l'œuvre (si disponible)</li>
+                                        <li>Un lien vers la source originale</li>
+                                        <li>La mention de la licence CC BY-SA 3.0 avec un lien vers le texte complet de la licence</li>
+                                    </ul>
+                                    <div class="example-box">
+                                        <p>Exemple d'attribution :</p>
+                                        <p>"Carte de la Première Guerre mondiale" par Martin Durand, disponible sur [URL source] sous licence <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">CC BY-SA 3.0</a>.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-item">
+                                    <span class="step-marker">3</span>
+                                    <p><strong>Modification</strong> : Si vous modifiez l'image (par exemple, en ajoutant des annotations ou en recadrant), vous devez indiquer que des modifications ont été apportées.</p>
+                                    <div class="example-box">
+                                        <p>Exemple d'attribution après modification :</p>
+                                        <p>"Adaptation de 'Carte de la Première Guerre mondiale' par Martin Durand, disponible sur [URL source] sous licence <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">CC BY-SA 3.0</a>. Annotations ajoutées pour usage pédagogique."</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-item">
+                                    <span class="step-marker">4</span>
+                                    <p><strong>Partage de votre adaptation</strong> : Si vous partagez votre cours contenant l'image modifiée (par exemple, en le mettant en ligne sur votre site web), vous devez le faire sous la même licence CC BY-SA 3.0.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <h4>Points d'attention pour la version 3.0</h4>
+                                <ul>
+                                    <li>La version 3.0 peut avoir des variantes nationales (par exemple, CC BY-SA 3.0 FR pour la France)</li>
+                                    <li>Les œuvres sous CC BY-SA 3.0 ne sont pas automatiquement compatibles avec les versions ultérieures (comme 4.0)</li>
+                                    <li>Si vous combinez des œuvres sous différentes versions de licences SA, vérifiez leur compatibilité</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ressources">
+                <h2>6. Ressources et outils utiles</h2>
+                <div class="content-box">
+                    <div class="resources-grid">
+                        <div class="resource-card">
+                            <h3>Choisir une licence</h3>
+                            <p>Outils pour vous aider à sélectionner la licence la plus adaptée à vos besoins :</p>
+                            <ul>
+                                <li><a href="https://creativecommons.org/choose/" target="_blank">Sélecteur de licence Creative Commons</a> - Assistant officiel pour choisir votre licence</li>
+                                <li><a href="https://creativecommons.org/licenses/" target="_blank">Page des licences CC</a> - Détails sur toutes les licences disponibles</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <h3>Trouver des contenus sous licence CC</h3>
+                            <p>Ressources pour découvrir des contenus librement utilisables dans vos cours :</p>
+                            <ul>
+                                <li><a href="https://search.creativecommons.org/" target="_blank">CC Search</a> - Moteur de recherche pour images, sons et autres médias sous licence CC</li>
+                                <li><a href="https://commons.wikimedia.org/" target="_blank">Wikimedia Commons</a> - Vaste collection de médias libres</li>
+                                <li><a href="https://www.flickr.com/creativecommons/" target="_blank">Flickr Creative Commons</a> - Photos sous licences CC</li>
+                                <li><a href="https://pixabay.com/" target="_blank">Pixabay</a> - Images et vidéos principalement sous CC0</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <h3>Guides et documentation</h3>
+                            <p>Ressources pour approfondir votre compréhension des licences CC :</p>
+                            <ul>
+                                <li><a href="https://wiki.creativecommons.org/wiki/Best_practices_for_attribution" target="_blank">Bonnes pratiques d'attribution</a> - Guide pour citer correctement</li>
+                                <li><a href="https://creativecommons.org/faq/" target="_blank">FAQ Creative Commons</a> - Réponses aux questions fréquentes</li>
+                                <li><a href="https://creativecommons.org/share-your-work/licensing-considerations/" target="_blank">Considérations sur les licences</a> - Informations pour choisir la bonne licence</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <h3>Outils pour les enseignants</h3>
+                            <p>Ressources spécifiques pour le contexte éducatif :</p>
+                            <ul>
+                                <li><a href="https://oercommons.org/" target="_blank">OER Commons</a> - Ressources éducatives libres</li>
+                                <li><a href="https://www.merlot.org/" target="_blank">MERLOT</a> - Matériels éducatifs multimédias</li>
+                                <li><a href="https://www.openculture.com/" target="_blank">Open Culture</a> - Collection de ressources culturelles et éducatives gratuites</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="conclusion-box">
+                        <h3>En résumé</h3>
+                        <p>Les licences Creative Commons offrent un cadre juridique flexible et accessible pour partager vos créations pédagogiques tout en respectant le droit d'auteur. Pour un site web éducatif non lucratif comme celui d'un professeur d'histoire-géographie :</p>
+                        <ul>
+                            <li>Les licences CC BY ou CC BY-SA sont souvent les plus adaptées pour favoriser le partage des connaissances</li>
+                            <li>Veillez toujours à respecter les conditions des licences lorsque vous utilisez des œuvres créées par d'autres</li>
+                            <li>N'hésitez pas à préciser clairement les licences que vous appliquez à vos propres contenus</li>
+                            <li>Sensibilisez vos élèves à l'importance du respect du droit d'auteur et aux avantages du partage des connaissances</li>
+                        </ul>
+                        <p>En adoptant les licences Creative Commons, vous contribuez à un écosystème éducatif plus ouvert et collaboratif, tout en préservant vos droits en tant que créateur.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 - Guide des licences Creative Commons pour l'enseignement</p>
+            <p>Ce document est mis à disposition selon les termes de la licence <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank">Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0 International (CC BY-SA 4.0)</a>.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
