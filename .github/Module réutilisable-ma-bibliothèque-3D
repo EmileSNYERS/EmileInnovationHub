@@ -1,0 +1,754 @@
+import React, { useState, useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import { Camera, BookOpen, Plus, X, Search, Download, Share2, Heart } from 'lucide-react';
+
+const STATUTS = [
+  { id: 'lu', label: 'Lu', color: '#10b981', emoji: '✓' },
+  { id: 'a-lire', label: 'À lire', color: '#3b82f6', emoji: '📚' },
+  { id: 'prete', label: 'Prêté', color: '#f59e0b', emoji: '🤝' },
+  { id: 'a-vendre', label: 'À vendre', color: '#ef4444', emoji: '💰' },
+  { id: 'urgent', label: 'À lire rapidement', color: '#8b5cf6', emoji: '⚡' }
+];
+
+export default function Bibliotheque() {
+  const [livres, setLivres] = useState([
+    {
+      id: 1,
+      titre: "Le Petit Prince",
+      auteur: "Antoine de Saint-Exupéry",
+      statut: "lu",
+      notes: "Un classique magnifique sur l'enfance et l'imagination.",
+      couleur: "#FFD700",
+      annee: "1943"
+    },
+    {
+      id: 2,
+      titre: "1984",
+      auteur: "George Orwell",
+      statut: "a-lire",
+      notes: "À lire absolument pour comprendre les dystopies modernes.",
+      couleur: "#FF6B6B",
+      annee: "1949"
+    },
+    {
+      id: 3,
+      titre: "L'Étranger",
+      auteur: "Albert Camus",
+      statut: "lu",
+      notes: "Réflexion profonde sur l'absurdité de l'existence.",
+      couleur: "#4ECDC4",
+      annee: "1942"
+    },
+    {
+      id: 4,
+      titre: "Les Misérables",
+      auteur: "Victor Hugo",
+      statut: "urgent",
+      notes: "Chef-d'œuvre de la littérature française.",
+      couleur: "#9B59B6",
+      annee: "1862"
+    }
+  ]);
+  
+  const [livreSelectionne, setLivreSelectionne] = useState(null);
+  const [afficherFormulaire, setAfficherFormulaire] = useState(false);
+  const [recherche, setRecherche] = useState('');
+  const [nouveauLivre, setNouveauLivre] = useState({
+    titre: '',
+    auteur: '',
+    statut: 'a-lire',
+    notes: '',
+    annee: new Date().getFullYear().toString(),
+    couleur: '#' + Math.floor(Math.random()*16777215).toString(16)
+  });
+  
+  const canvasRef = useRef(null);
+  const sceneRef = useRef(null);
+  const cameraRef = useRef(null);
+  const rendererRef = useRef(null);
+  const livresObjetsRef = useRef([]);
+  const livreOuvertRef = useRef(null);
+  const animationFrameRef = useRef(null);
+
+  // Fonction pour créer un canvas de texture avec titre et auteur
+  const creerTextureCouverture = (livre) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 768;
+    const ctx = canvas.getContext('2d');
+
+    // Fond avec gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, livre.couleur);
+    gradient.addColorStop(1, shadeColor(livre.couleur, -30));
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Bordure dorée
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 12;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    
+    // Bordure intérieure
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(35, 35, canvas.width - 70, canvas.height - 70);
+
+    // Motif décoratif en haut
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    for (let i = 0; i < 5; i++) {
+      ctx.beginPath();
+      ctx.arc(256 + i * 40 - 80, 100, 15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Titre
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 48px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    
+    const mots = livre.titre.split(' ');
+    let ligne = '';
+    let lignes = [];
+    
+    mots.forEach(mot => {
+      const testLigne = ligne + mot + ' ';
+      if (ctx.measureText(testLigne).width > canvas.width - 100 && ligne.length > 0) {
+        lignes.push(ligne);
+        ligne = mot + ' ';
+      } else {
+        ligne = testLigne;
+      }
+    });
+    lignes.push(ligne);
+    
+    const startY = 300;
+    lignes.forEach((ligne, index) => {
+      ctx.fillText(ligne.trim(), canvas.width / 2, startY + index * 60);
+    });
+
+    // Auteur
+    ctx.font = 'italic 32px Georgia, serif';
+    ctx.fillStyle = '#F0E68C';
+    ctx.fillText(livre.auteur, canvas.width / 2, 550);
+
+    // Année
+    if (livre.annee) {
+      ctx.font = '24px Georgia, serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.fillText(livre.annee, canvas.width / 2, 650);
+    }
+
+    // Motif décoratif en bas
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(100, 700);
+    ctx.lineTo(412, 700);
+    ctx.stroke();
+
+    return new THREE.CanvasTexture(canvas);
+  };
+
+  // Fonction pour assombrir/éclaircir une couleur
+  const shadeColor = (color, percent) => {
+    const num = parseInt(color.replace("#",""), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) + amt;
+    const G = (num >> 8 & 0x00FF) + amt;
+    const B = (num & 0x0000FF) + amt;
+    return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 +
+      (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255))
+      .toString(16).slice(1);
+  };
+
+  // Initialisation de Three.js
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f0f1e);
+    scene.fog = new THREE.Fog(0x0f0f1e, 8, 15);
+    sceneRef.current = scene;
+
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      canvasRef.current.clientWidth / canvasRef.current.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(0, 3, 8);
+    camera.lookAt(0, 2, 0);
+    cameraRef.current = camera;
+
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas: canvasRef.current,
+      antialias: true,
+      alpha: true
+    });
+    renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    rendererRef.current = renderer;
+
+    // Lumières améliorées
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 10, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+    scene.add(directionalLight);
+
+    const pointLight1 = new THREE.PointLight(0xffd700, 0.8, 20);
+    pointLight1.position.set(-5, 5, 5);
+    scene.add(pointLight1);
+
+    const pointLight2 = new THREE.PointLight(0x4169e1, 0.6, 20);
+    pointLight2.position.set(5, 5, 5);
+    scene.add(pointLight2);
+
+    // Sol amélioré avec texture
+    const floorGeometry = new THREE.PlaneGeometry(20, 20);
+    const floorMaterial = new THREE.MeshStandardMaterial({ 
+      color: 0x1a1a2e,
+      roughness: 0.7,
+      metalness: 0.3
+    });
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Mur arrière
+    const murGeometry = new THREE.PlaneGeometry(20, 10);
+    const murMaterial = new THREE.MeshStandardMaterial({ 
+      color: 0x16213e,
+      roughness: 0.9
+    });
+    const mur = new THREE.Mesh(murGeometry, murMaterial);
+    mur.position.set(0, 3, -2);
+    mur.receiveShadow = true;
+    scene.add(mur);
+
+    // Étagères en bois avec détails
+    const etagereGeometry = new THREE.BoxGeometry(12, 0.25, 1.2);
+    const etagereMaterial = new THREE.MeshStandardMaterial({ 
+      color: 0x654321,
+      roughness: 0.8,
+      metalness: 0.1
+    });
+    
+    for (let i = 0; i < 3; i++) {
+      const etagere = new THREE.Mesh(etagereGeometry, etagereMaterial);
+      etagere.position.set(0, 1 + i * 1.8, -1);
+      etagere.castShadow = true;
+      etagere.receiveShadow = true;
+      scene.add(etagere);
+
+      // Supports d'étagère
+      const supportGeometry = new THREE.BoxGeometry(0.2, 1, 0.8);
+      const supportMaterial = new THREE.MeshStandardMaterial({ color: 0x4a2511 });
+      
+      [-5, 5].forEach(x => {
+        const support = new THREE.Mesh(supportGeometry, supportMaterial);
+        support.position.set(x, 0.5 + i * 1.8, -1);
+        support.castShadow = true;
+        scene.add(support);
+      });
+    }
+
+    // Particules flottantes
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 100;
+    const positions = new Float32Array(particlesCount * 3);
+    
+    for (let i = 0; i < particlesCount * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 20;
+    }
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.05,
+      transparent: true,
+      opacity: 0.6
+    });
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+
+    // Gestion du redimensionnement
+    const handleResize = () => {
+      if (!canvasRef.current) return;
+      camera.aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Animation
+    let time = 0;
+    const animate = () => {
+      animationFrameRef.current = requestAnimationFrame(animate);
+      time += 0.01;
+      
+      // Animation des particules
+      particles.rotation.y = time * 0.1;
+      
+      // Animation du livre ouvert
+      if (livreOuvertRef.current) {
+        livreOuvertRef.current.rotation.y = Math.sin(time * 2) * 0.15;
+        livreOuvertRef.current.position.y = 3.5 + Math.sin(time * 3) * 0.15;
+      }
+      
+      // Animation des lumières
+      pointLight1.intensity = 0.8 + Math.sin(time) * 0.2;
+      pointLight2.intensity = 0.6 + Math.cos(time * 1.5) * 0.2;
+      
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      renderer.dispose();
+    };
+  }, []);
+
+  // Mise à jour des livres dans la scène
+  useEffect(() => {
+    if (!sceneRef.current) return;
+
+    livresObjetsRef.current.forEach(obj => {
+      sceneRef.current.remove(obj);
+      if (obj.geometry) obj.geometry.dispose();
+      if (obj.material) {
+        if (Array.isArray(obj.material)) {
+          obj.material.forEach(mat => mat.dispose());
+        } else {
+          obj.material.dispose();
+        }
+      }
+    });
+    livresObjetsRef.current = [];
+
+    const livresFiltres = livres.filter(livre => 
+      livre.titre.toLowerCase().includes(recherche.toLowerCase()) ||
+      livre.auteur.toLowerCase().includes(recherche.toLowerCase())
+    );
+
+    livresFiltres.forEach((livre, index) => {
+      const rangee = Math.floor(index / 6);
+      const colonne = index % 6;
+      
+      const livreGeometry = new THREE.BoxGeometry(0.7, 0.9, 0.15);
+      
+      // Texture pour la couverture
+      const textureCouverture = creerTextureCouverture(livre);
+      
+      // Matériaux pour chaque face
+      const materiaux = [
+        new THREE.MeshStandardMaterial({ color: shadeColor(livre.couleur, -20), roughness: 0.6 }), // Côté droit
+        new THREE.MeshStandardMaterial({ color: shadeColor(livre.couleur, -20), roughness: 0.6 }), // Côté gauche
+        new THREE.MeshStandardMaterial({ color: shadeColor(livre.couleur, -30), roughness: 0.7 }), // Haut
+        new THREE.MeshStandardMaterial({ color: shadeColor(livre.couleur, -30), roughness: 0.7 }), // Bas
+        new THREE.MeshStandardMaterial({ map: textureCouverture, roughness: 0.4, metalness: 0.2 }), // Face avant
+        new THREE.MeshStandardMaterial({ color: shadeColor(livre.couleur, -10), roughness: 0.6 }), // Face arrière
+      ];
+      
+      const livreMesh = new THREE.Mesh(livreGeometry, materiaux);
+      
+      livreMesh.position.set(
+        -5 + colonne * 1.7,
+        1.45 + rangee * 1.8,
+        -0.4
+      );
+      livreMesh.castShadow = true;
+      livreMesh.receiveShadow = true;
+      livreMesh.userData = { livreId: livre.id };
+      
+      sceneRef.current.add(livreMesh);
+      livresObjetsRef.current.push(livreMesh);
+    });
+  }, [livres, recherche]);
+
+  // Gestion des clics
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (!canvasRef.current || !cameraRef.current) return;
+
+      const rect = canvasRef.current.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera({ x, y }, cameraRef.current);
+
+      const intersects = raycaster.intersectObjects(livresObjetsRef.current);
+
+      if (intersects.length > 0) {
+        const livreId = intersects[0].object.userData.livreId;
+        const livre = livres.find(l => l.id === livreId);
+        if (livre) {
+          ouvrirLivre(intersects[0].object, livre);
+        }
+      }
+    };
+
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener('click', handleClick);
+      return () => canvas.removeEventListener('click', handleClick);
+    }
+  }, [livres]);
+
+  const ouvrirLivre = (objetLivre, livre) => {
+    if (livreOuvertRef.current) {
+      sceneRef.current.remove(livreOuvertRef.current);
+      livreOuvertRef.current = null;
+    }
+
+    const groupe = new THREE.Group();
+    
+    const pageGeometry = new THREE.BoxGeometry(1, 0.02, 1.2);
+    const pageMaterial = new THREE.MeshStandardMaterial({ 
+      color: 0xFFFAF0,
+      roughness: 0.8
+    });
+    
+    const pageGauche = new THREE.Mesh(pageGeometry, pageMaterial);
+    pageGauche.position.x = -0.5;
+    pageGauche.rotation.z = -0.15;
+    pageGauche.castShadow = true;
+    groupe.add(pageGauche);
+    
+    const pageDroite = new THREE.Mesh(pageGeometry, pageMaterial);
+    pageDroite.position.x = 0.5;
+    pageDroite.rotation.z = 0.15;
+    pageDroite.castShadow = true;
+    groupe.add(pageDroite);
+    
+    const textureCouverture = creerTextureCouverture(livre);
+    const couvertureMaterial = new THREE.MeshStandardMaterial({ 
+      map: textureCouverture,
+      roughness: 0.4,
+      metalness: 0.3
+    });
+    const couvertureGauche = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 0.03, 1.2),
+      couvertureMaterial
+    );
+    couvertureGauche.position.x = -0.5;
+    couvertureGauche.rotation.z = -0.4;
+    couvertureGauche.castShadow = true;
+    groupe.add(couvertureGauche);
+    
+    // Lumière sur le livre ouvert
+    const spotLight = new THREE.SpotLight(0xffffff, 2);
+    spotLight.position.set(0, 3, 2);
+    spotLight.angle = Math.PI / 6;
+    spotLight.penumbra = 0.5;
+    spotLight.target = groupe;
+    sceneRef.current.add(spotLight);
+    groupe.userData.spotlight = spotLight;
+    
+    groupe.position.set(0, 3.5, 2);
+    groupe.rotation.x = -0.4;
+    
+    sceneRef.current.add(groupe);
+    livreOuvertRef.current = groupe;
+    
+    setLivreSelectionne(livre);
+  };
+
+  const ajouterLivre = () => {
+    if (!nouveauLivre.titre || !nouveauLivre.auteur) return;
+    
+    const livre = {
+      ...nouveauLivre,
+      id: Date.now()
+    };
+    
+    setLivres([...livres, livre]);
+    setNouveauLivre({
+      titre: '',
+      auteur: '',
+      statut: 'a-lire',
+      notes: '',
+      annee: new Date().getFullYear().toString(),
+      couleur: '#' + Math.floor(Math.random()*16777215).toString(16)
+    });
+    setAfficherFormulaire(false);
+  };
+
+  const supprimerLivre = (id) => {
+    setLivres(livres.filter(l => l.id !== id));
+    if (livreSelectionne?.id === id) {
+      setLivreSelectionne(null);
+      if (livreOuvertRef.current) {
+        if (livreOuvertRef.current.userData.spotlight) {
+          sceneRef.current.remove(livreOuvertRef.current.userData.spotlight);
+        }
+        sceneRef.current.remove(livreOuvertRef.current);
+        livreOuvertRef.current = null;
+      }
+    }
+  };
+
+  const modifierStatut = (id, nouveauStatut) => {
+    setLivres(livres.map(l => l.id === id ? { ...l, statut: nouveauStatut } : l));
+    if (livreSelectionne?.id === id) {
+      setLivreSelectionne({ ...livreSelectionne, statut: nouveauStatut });
+    }
+  };
+
+  const modifierNotes = (id, nouvellesNotes) => {
+    setLivres(livres.map(l => l.id === id ? { ...l, notes: nouvellesNotes } : l));
+    if (livreSelectionne?.id === id) {
+      setLivreSelectionne({ ...livreSelectionne, notes: nouvellesNotes });
+    }
+  };
+
+  const exporterDonnees = () => {
+    const dataStr = JSON.stringify(livres, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'ma-bibliotheque.json';
+    link.click();
+  };
+
+  const stats = STATUTS.map(statut => ({
+    ...statut,
+    count: livres.filter(l => l.statut === statut.id).length
+  }));
+
+  return (
+    <div className="h-screen w-full bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex flex-col">
+      {/* En-tête */}
+      <header className="bg-slate-900/80 backdrop-blur-lg border-b border-purple-500/30 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg">
+              <BookOpen className="text-white w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Ma Bibliothèque 3D</h1>
+              <p className="text-sm text-purple-300">Organisez et suivez vos lectures</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={exporterDonnees}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors border border-slate-700"
+            >
+              <Download className="w-4 h-4" />
+              Exporter
+            </button>
+            <div className="text-sm text-slate-400 px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700">
+              <Heart className="w-4 h-4 inline mr-1 text-pink-500" />
+              Licence Creative Commons
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* Panneau latéral */}
+        <aside className="w-80 bg-slate-900/50 backdrop-blur-lg border-r border-slate-800 overflow-y-auto">
+          <div className="p-6">
+            {/* Statistiques */}
+            <div className="mb-6 p-5 bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/30 shadow-xl">
+              <div className="text-4xl font-bold text-white mb-3">
+                {livres.length}
+                <span className="text-lg font-normal text-purple-300 ml-2">
+                  livre{livres.length > 1 ? 's' : ''}
+                </span>
+              </div>
+              <div className="space-y-2">
+                {stats.map(stat => (
+                  <div key={stat.id} className="flex justify-between items-center p-2 bg-slate-800/50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{stat.emoji}</span>
+                      <div 
+                        className="w-2 h-2 rounded-full" 
+                        style={{ backgroundColor: stat.color }}
+                      />
+                      <span className="text-sm text-slate-300">{stat.label}</span>
+                    </div>
+                    <span className="text-white font-bold text-lg">{stat.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Recherche */}
+            <div className="mb-4 relative">
+              <Search className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Rechercher un livre..."
+                value={recherche}
+                onChange={(e) => setRecherche(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-slate-800/70 border border-slate-700 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              />
+            </div>
+
+            {/* Bouton ajouter */}
+            <button
+              onClick={() => setAfficherFormulaire(!afficherFormulaire)}
+              className="w-full mb-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg"
+            >
+              {afficherFormulaire ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+              {afficherFormulaire ? 'Annuler' : 'Ajouter un livre'}
+            </button>
+
+            {/* Formulaire */}
+            {afficherFormulaire && (
+              <div className="mb-6 p-5 bg-slate-800/70 rounded-xl border border-slate-700 space-y-3 shadow-xl">
+                <input
+                  type="text"
+                  placeholder="Titre du livre"
+                  value={nouveauLivre.titre}
+                  onChange={(e) => setNouveauLivre({ ...nouveauLivre, titre: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <input
+                  type="text"
+                  placeholder="Auteur"
+                  value={nouveauLivre.auteur}
+                  onChange={(e) => setNouveauLivre({ ...nouveauLivre, auteur: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <input
+                  type="text"
+                  placeholder="Année (optionnel)"
+                  value={nouveauLivre.annee}
+                  onChange={(e) => setNouveauLivre({ ...nouveauLivre, annee: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <select
+                  value={nouveauLivre.statut}
+                  onChange={(e) => setNouveauLivre({ ...nouveauLivre, statut: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                  {STATUTS.map(s => (
+                    <option key={s.id} value={s.id}>{s.emoji} {s.label}</option>
+                  ))}
+                </select>
+                <div className="flex items-center gap-3">
+                  <label className="text-slate-300 text-sm">Couleur:</label>
+                  <input
+                    type="color"
+                    value={nouveauLivre.couleur}
+                    onChange={(e) => setNouveauLivre({ ...nouveauLivre, couleur: e.target.value })}
+                    className="w-full h-12 bg-slate-700 border border-slate-600 rounded-lg cursor-pointer"
+                  />
+                </div>
+                <button
+                  onClick={ajouterLivre}
+                  className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg transition-all transform hover:scale-105"
+                >
+                  ✓ Ajouter à ma bibliothèque
+                </button>
+              </div>
+            )}
+
+            {/* Instructions */}
+            <div className="p-4 bg-purple-900/30 border border-purple-500/30 rounded-xl">
+              <p className="text-sm text-purple-200 leading-relaxed">
+                <Camera className="inline w-4 h-4 mr-1" />
+                <strong>Astuce:</strong> Cliquez sur n'importe quel livre dans la scène 3D pour l'ouvrir et découvrir tous ses détails !
+              </p>
+            </div>
+          </div>
+        </aside>
+
+        {/* Scène 3D */}
+        <main className="flex-1 relative">
+          <canvas
+            ref={canvasRef}
+            className="w-full h-full cursor-pointer"
+          />
+          
+          {/* Panneau de détails */}
+          {livreSelectionne && (
+            <div className="absolute top-6 right-6 w-96 bg-slate-900/95 backdrop-blur-xl border border-purple-500/40 rounded-2xl p-6 shadow-2xl">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">{livreSelectionne.titre}</h2>
+                  <p className="text-purple-300 italic">par {livreSelectionne.auteur}</p>
+                  {livreSelectionne.annee && (
+                    <p className="text-slate-400 text-sm mt-1">Publié en {livreSelectionne.annee}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => {
+                    setLivreSelectionne(null);
+                    if (livreOuvertRef.current) {
+                      if (livreOuvertRef.current.userData.spotlight) {
+                        sceneRef.current.remove(livreOuvertRef.current.userData.spotlight);
+                      }
+                      sceneRef.current.remove(livreOuvertRef.current);
+                      livreOuvertRef.current = null;
+                    }
+                  }}
+                  className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-lg"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-sm text-slate-400 mb-2 font-semibold">Statut</label>
+                <select
+                  value={livreSelectionne.statut}
+                  onChange={(e) => modifierStatut(livreSelectionne.id, e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                  {STATUTS.map(s => (
+                    <option key={s.id} value={s.id}>{s.emoji} {s.label}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-sm text-slate-400 mb-2 font-semibold">Notes personnelles</label>
+                <textarea
+                  value={livreSelectionne.notes}
+                  onChange={(e) => modifierNotes(livreSelectionne.id, e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 h-32 resize-none"
+                  placeholder="Vos impressions, citations préférées..."
+                />
+              </div>
+              
+              <button
+                onClick={() => supprimerLivre(livreSelectionne.id)}
+                className="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-lg transition-all transform hover:scale-105"
+              >
+                Supprimer ce livre
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-slate-900/80 backdrop-blur-lg border-t border-purple-500/30 px-6 py-3 text-center">
+        <p className="text-sm text-slate-400">
+          Créé avec <Heart className="w-4 h-4 inline text-red-500" /> • Partageable sous licence Creative Commons • Libre d'utilisation
+        </p>
+      </footer>
+    </div>
+  );
+}
