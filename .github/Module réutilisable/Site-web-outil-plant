@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiagramPro - Créateur de Diagrammes Professionnel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 2px solid #e2e8f0;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-section {
+            padding: 24px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .sidebar-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .tool-btn {
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .tool-btn.danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+        }
+
+        .tool-btn.success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .tool-btn.warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3);
+        }
+
+        .shape-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .shape-card {
+            aspect-ratio: 1;
+            background: #f7fafc;
+            border: 3px solid #e2e8f0;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .shape-card:hover {
+            border-color: #667eea;
+            background: #eef2ff;
+            transform: scale(1.08);
+        }
+
+        .shape-card.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .color-card {
+            aspect-ratio: 1;
+            border: 4px solid #e2e8f0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-card:hover {
+            transform: scale(1.12);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-card.active {
+            border-color: #2d3748;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transform: scale(1.15);
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #2d3748;
+            cursor: pointer;
+        }
+
+        .canvas-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .canvas-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .canvas-control-btn {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .canvas-control-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .minimap {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 150px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .minimap canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .shortcuts-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .shortcuts-panel.active {
+            display: block;
+        }
+
+        .shortcuts-panel h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .shortcut-key {
+            background: #f7fafc;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        canvas {
+            display: block;
+            cursor: grab;
+        }
+
+        canvas:active {
+            cursor: grabbing;
+        }
+
+        .context-menu {
+            position: fixed;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            z-index: 1000;
+            display: none;
+            min-width: 220px;
+        }
+
+        .context-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #2d3748;
+        }
+
+        .context-item:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-btn.secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #edf2f7;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 3000;
+            font-weight: 500;
+        }
+
+        .toast.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .status-bar {
+            background: white;
+            border-top: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-info {
+            font-size: 13px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .zoom-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .zoom-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .zoom-level {
+            font-size: 13px;
+            font-weight: 600;
+            color: #667eea;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f7fafc;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        .template-card {
+            padding: 16px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .template-card:hover {
+            border-color: #667eea;
+            background: #eef2ff;
+            transform: translateY(-2px);
+        }
+
+        .template-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .template-card p {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .link-mode-active {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo">◆</div>
+            <div class="logo-text">
+                <h1>DiagramPro</h1>
+                <p>Créateur Professionnel Illimité</p>
+            </div>
+        </div>
+        <div class="stats">
+            <div class="stat">📊 Éléments: <span id="elemCount">0</span></div>
+            <div class="stat">🔗 Liens: <span id="linkCount">0</span></div>
+            <div class="stat">↩️ Annuler: <span id="undoCount">0</span></div>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" onclick="app.undo()">↩️ Annuler</button>
+            <button class="header-btn" onclick="app.redo()">↪️ Refaire</button>
+            <button class="header-btn" onclick="app.autoArrange()">✨ Auto-Arranger</button>
+            <button class="header-btn" onclick="app.toggleShortcuts()">⌨️ Raccourcis</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>🎨 Création</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" onclick="app.addElement()">➕ Élément</button>
+                    <button class="tool-btn" onclick="app.addTextLabel()">📝 Texte</button>
+                    <button class="tool-btn warning" id="linkBtn" onclick="app.toggleLinkMode()">🔗 Lier</button>
+                    <button class="tool-btn" onclick="app.editSelected()">✏️ Modifier</button>
+                    <button class="tool-btn success" onclick="app.showAll()">👁️ Tout Afficher</button>
+                    <button class="tool-btn danger" onclick="app.deleteSelected()">🗑️ Supprimer</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>🔷 Formes</h3>
+                <div class="shape-grid">
+                    <div class="shape-card active" onclick="app.setShape('circle')" data-shape="circle">●</div>
+                    <div class="shape-card" onclick="app.setShape('rectangle')" data-shape="rectangle">■</div>
+                    <div class="shape-card" onclick="app.setShape('diamond')" data-shape="diamond">◆</div>
+                    <div class="shape-card" onclick="app.setShape('triangle')" data-shape="triangle">▲</div>
+                    <div class="shape-card" onclick="app.setShape('hexagon')" data-shape="hexagon">⬡</div>
+                    <div class="shape-card" onclick="app.setShape('scroll')" data-shape="scroll">📜</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>💻 Icônes Système</h3>
+                <div class="shape-grid">
+                    <div class="shape-card" onclick="app.addIcon('💻')">💻</div>
+                    <div class="shape-card" onclick="app.addIcon('🖥️')">🖥️</div>
+                    <div class="shape-card" onclick="app.addIcon('🗄️')">🗄️</div>
+                    <div class="shape-card" onclick="app.addIcon('☁️')">☁️</div>
+                    <div class="shape-card" onclick="app.addIcon('🌐')">🌐</div>
+                    <div class="shape-card" onclick="app.addIcon('📱')">📱</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>🎨 Couleurs Éléments</h3>
+                <div class="color-grid">
+                    <div class="color-card active" style="background: #667eea;" onclick="app.setColor('#667eea')"></div>
+                    <div class="color-card" style="background: #f093fb;" onclick="app.setColor('#f093fb')"></div>
+                    <div class="color-card" style="background: #4facfe;" onclick="app.setColor('#4facfe')"></div>
+                    <div class="color-card" style="background: #43e97b;" onclick="app.setColor('#43e97b')"></div>
+                    <div class="color-card" style="background: #fa709a;" onclick="app.setColor('#fa709a')"></div>
+                    <div class="color-card" style="background: #feca57;" onclick="app.setColor('#feca57')"></div>
+                    <div class="color-card" style="background: #ff6348;" onclick="app.setColor('#ff6348')"></div>
+                    <div class="color-card" style="background: #a29bfe;" onclick="app.setColor('#a29bfe')"></div>
+                </div>
+                <div class="input-group" style="margin-top: 12px;">
+                    <input type="text" id="customColor" placeholder="#667eea" maxlength="7">
+                    <button class="tool-btn" style="margin-top: 8px;" onclick="app.applyCustomColor()">✓ Appliquer</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>🔗 Couleurs Liens</h3>
+                <div class="color-grid">
+                    <div class="color-card active" style="background: #2d3748;" onclick="app.setLinkColor('#2d3748')"></div>
+                    <div class="color-card" style="background: #667eea;" onclick="app.setLinkColor('#667eea')"></div>
+                    <div class="color-card" style="background: #43e97b;" onclick="app.setLinkColor('#43e97b')"></div>
+                    <div class="color-card" style="background: #fa709a;" onclick="app.setLinkColor('#fa709a')"></div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>⚙️ Options</h3>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="snapGrid" onchange="app.toggleSnap(this.checked)">
+                    <label for="snapGrid">Grille magnétique</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="transparent" onchange="app.toggleTransparent(this.checked)">
+                    <label for="transparent">Transparent</label>
+                </div>
+                <div class="input-group">
+                    <label>Taille</label>
+                    <input type="number" id="elemSize" value="40" min="20" max="100" onchange="app.setSize(this.value)">
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>📋 Templates</h3>
+                <div class="template-card" onclick="app.loadTemplate('network')">
+                    <h4>🌐 Architecture Réseau</h4>
+                    <p>Serveurs, DB, Cloud</p>
+                </div>
+                <div class="template-card" onclick="app.loadTemplate('workflow')">
+                    <h4>⚡ Flux de Travail</h4>
+                    <p>Processus métier</p>
+                </div>
+                <div class="template-card" onclick="app.loadTemplate('mindmap')">
+                    <h4>🧠 Carte Mentale</h4>
+                    <p>Brainstorming</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>💾 Export / Sauvegarde</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" onclick="app.exportPNG()">PNG</button>
+                    <button class="tool-btn" onclick="app.exportSVG()">SVG</button>
+                    <button class="tool-btn success" onclick="app.save()">💾 Sauver</button>
+                    <button class="tool-btn" onclick="app.load()">📂 Charger</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="tool-btn danger" style="width: 100%;" onclick="app.clearAll()">🔄 Tout Effacer</button>
+            </div>
+        </div>
+
+        <div class="canvas-wrapper">
+            <canvas id="canvas"></canvas>
+            
+            <div class="canvas-controls">
+                <div class="canvas-control-btn" onclick="app.resetView()">⊙</div>
+                <div class="canvas-control-btn" onclick="app.zoomIn()">+</div>
+                <div class="canvas-control-btn" onclick="app.zoomOut()">−</div>
+            </div>
+
+            <div class="minimap">
+                <canvas id="minimapCanvas"></canvas>
+            </div>
+
+            <div class="shortcuts-panel" id="shortcutsPanel">
+                <h4>⌨️ Raccourcis Clavier</h4>
+                <div class="shortcut-item">
+                    <span>Nouvel élément</span>
+                    <span class="shortcut-key">N</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>Supprimer</span>
+                    <span class="shortcut-key">Delete / Suppr</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>Annuler</span>
+                    <span class="shortcut-key">Ctrl+Z</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>Refaire</span>
+                    <span class="shortcut-key">Ctrl+Y</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>Dupliquer</span>
+                    <span class="shortcut-key">Ctrl+D</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>Sauvegarder</span>
+                    <span class="shortcut-key">Ctrl+S</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div class="status-info" id="statusText">✨ Prêt à créer • Canvas infini avec zoom et pan</div>
+        <div class="zoom-control">
+            <button class="zoom-btn" onclick="app.zoomOut()">−</button>
+            <div class="zoom-level" id="zoomLevel">100%</div>
+            <button class="zoom-btn" onclick="app.zoomIn()">+</button>
+        </div>
+    </div>
+
+    <div class="context-menu" id="contextMenu">
+        <div class="context-item" onclick="app.contextEdit()">✏️ Modifier</div>
+        <div class="context-item" onclick="app.contextHide()">👁️ Masquer</div>
+        <div class="context-item" onclick="app.contextDuplicate()">📋 Dupliquer</div>
+        <div class="context-item" onclick="app.contextDelete()">🗑️ Supprimer</div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <h3>✏️ Modifier l'Élément</h3>
+            <div class="input-group">
+                <label>Texte</label>
+                <textarea id="elemText" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Lien (optionnel)</label>
+                <input type="text" id="elemLink" placeholder="https://...">
+            </div>
+            <div class="input-group">
+                <label>Statut</label>
+                <select id="elemStatus">
+                    <option value="">Aucun</option>
+                    <option value="✓">✓ Terminé</option>
+                    <option value="⏳">⏳ En cours</option>
+                    <option value="⚠️">⚠️ Attention</option>
+                    <option value="❌">❌ Erreur</option>
+                    <option value="⭐">⭐ Important</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Notes</label>
+                <textarea id="elemNotes" rows="2" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit;"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="app.saveEdit()">Sauvegarder</button>
+                <button class="modal-btn secondary" onclick="app.closeModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        class DiagramApp {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.minimapCanvas = document.getElementById('minimapCanvas');
+                this.minimapCtx = this.minimapCanvas.getContext('2d');
+                
+                this.elements = [];
+                this.links = [];
+                this.history = [];
+                this.historyIndex = -1;
+                this.selected = null;
+                this.dragging = null;
+                this.linkMode = false;
+                this.linkStart = null;
+                this.contextElem = null;
+                
+                this.currentShape = 'circle';
+                this.currentColor = '#667eea';
+                this.currentLinkColor = '#2d3748';
+                this.currentSize = 40;
+                this.transparent = false;
+                this.snapToGrid = false;
+                
+                this.zoom = 1;
+                this.panX = 0;
+                this.panY = 0;
+                this.isPanning = false;
+                this.lastMouseX = 0;
+                this.lastMouseY = 0;
+                
+                this.initCanvas();
+                this.initEvents();
+                this.loadAuto();
+                this.draw();
+            }
+
+            initCanvas() {
+                this.canvas.width = this.canvas.parentElement.clientWidth;
+                this.canvas.height = this.canvas.parentElement.clientHeight;
+                this.minimapCanvas.width = 200;
+                this.minimapCanvas.height = 150;
+                window.addEventListener('resize', () => {
+                    this.canvas.width = this.canvas.parentElement.clientWidth;
+                    this.canvas.height = this.canvas.parentElement.clientHeight;
+                    this.draw();
+                });
+            }
+
+            initEvents() {
+                this.canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
+                this.canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
+                this.canvas.addEventListener('mouseup', () => this.onMouseUp());
+                this.canvas.addEventListener('wheel', (e) => this.onWheel(e));
+                this.canvas.addEventListener('contextmenu', (e) => this.onContext(e));
+                
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.context-menu')) {
+                        document.getElementById('contextMenu').style.display = 'none';
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => this.onKeyDown(e));
+            }
+
+            screenToWorld(x, y) {
+                return {
+                    x: (x - this.panX) / this.zoom,
+                    y: (y - this.panY) / this.zoom
+                };
+            }
+
+            worldToScreen(x, y) {
+                return {
+                    x: x * this.zoom + this.panX,
+                    y: y * this.zoom + this.panY
+                };
+            }
+
+            onMouseDown(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                const world = this.screenToWorld(mx, my);
+
+                if (e.button === 1 || e.shiftKey) {
+                    this.isPanning = true;
+                    this.lastMouseX = mx;
+                    this.lastMouseY = my;
+                    this.canvas.style.cursor = 'grabbing';
+                    return;
+                }
+
+                for (let i = this.elements.length - 1; i >= 0; i--) {
+                    const elem = this.elements[i];
+                    if (!elem.visible) continue;
+                    
+                    if (this.hitTest(world.x, world.y, elem)) {
+                        if (this.linkMode && elem.type === 'element') {
+                            if (!this.linkStart) {
+                                this.linkStart = elem;
+                                this.showToast('Premier élément sélectionné');
+                            } else if (this.linkStart !== elem) {
+                                this.saveState();
+                                this.links.push({
+                                    from: this.linkStart,
+                                    to: elem,
+                                    color: this.currentLinkColor,
+                                    type: 'solid'
+                                });
+                                this.linkStart = null;
+                                this.linkMode = false;
+                                document.getElementById('linkBtn').classList.remove('link-mode-active');
+                                this.showToast('Lien créé !');
+                                this.updateStats();
+                                this.draw();
+                            }
+                            return;
+                        }
+                        
+                        this.dragging = elem;
+                        this.selected = elem;
+                        this.draw();
+                        return;
+                    }
+                }
+                
+                this.selected = null;
+                this.draw();
+            }
+
+            onMouseMove(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                
+                if (this.isPanning) {
+                    const dx = mx - this.lastMouseX;
+                    const dy = my - this.lastMouseY;
+                    this.panX += dx;
+                    this.panY += dy;
+                    this.lastMouseX = mx;
+                    this.lastMouseY = my;
+                    this.draw();
+                    return;
+                }
+
+                if (this.dragging) {
+                    const world = this.screenToWorld(mx, my);
+                    if (this.snapToGrid) {
+                        const gridSize = 20;
+                        world.x = Math.round(world.x / gridSize) * gridSize;
+                        world.y = Math.round(world.y / gridSize) * gridSize;
+                    }
+                    this.dragging.x = world.x;
+                    this.dragging.y = world.y;
+                    this.draw();
+                }
+            }
+
+            onMouseUp() {
+                this.isPanning = false;
+                this.dragging = null;
+                this.canvas.style.cursor = this.linkMode ? 'crosshair' : 'grab';
+            }
+
+            onWheel(e) {
+                e.preventDefault();
+                const rect = this.canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newZoom = Math.max(0.1, Math.min(5, this.zoom * delta));
+                
+                const world = this.screenToWorld(mx, my);
+                this.zoom = newZoom;
+                const newScreen = this.worldToScreen(world.x, world.y);
+                
+                this.panX += mx - newScreen.x;
+                this.panY += my - newScreen.y;
+                
+                document.getElementById('zoomLevel').textContent = Math.round(this.zoom * 100) + '%';
+                this.draw();
+            }
+
+            onContext(e) {
+                e.preventDefault();
+                const rect = this.canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                const world = this.screenToWorld(mx, my);
+
+                for (let i = this.elements.length - 1; i >= 0; i--) {
+                    const elem = this.elements[i];
+                    if (elem.visible && this.hitTest(world.x, world.y, elem)) {
+                        this.contextElem = elem;
+                        this.selected = elem;
+                        const menu = document.getElementById('contextMenu');
+                        menu.style.display = 'block';
+                        menu.style.left = e.clientX + 'px';
+                        menu.style.top = e.clientY + 'px';
+                        this.draw();
+                        return;
+                    }
+                }
+            }
+
+            onKeyDown(e) {
+                if (e.key === 'Delete' || e.key === 'Backspace') {
+                    if (this.selected) {
+                        e.preventDefault();
+                        this.deleteSelected();
+                    }
+                }
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'z') {
+                        e.preventDefault();
+                        this.undo();
+                    }
+                    if (e.key === 'y') {
+                        e.preventDefault();
+                        this.redo();
+                    }
+                    if (e.key === 's') {
+                        e.preventDefault();
+                        this.save();
+                    }
+                    if (e.key === 'd' && this.selected) {
+                        e.preventDefault();
+                        this.duplicate();
+                    }
+                }
+                if (e.key === 'n') {
+                    this.addElement();
+                }
+            }
+
+            hitTest(x, y, elem) {
+                if (elem.type === 'text') {
+                    this.ctx.font = `${elem.fontSize}px Poppins`;
+                    const m = this.ctx.measureText(elem.text);
+                    return x >= elem.x - m.width/2 && x <= elem.x + m.width/2 &&
+                           y >= elem.y - elem.fontSize && y <= elem.y + 5;
+                }
+                const dx = x - elem.x;
+                const dy = y - elem.y;
+                const r = elem.radius;
+                
+                switch(elem.shape) {
+                    case 'circle': return Math.sqrt(dx*dx + dy*dy) <= r;
+                    case 'rectangle': return Math.abs(dx) <= r && Math.abs(dy) <= r;
+                    case 'diamond': return Math.abs(dx) + Math.abs(dy) <= r*1.2;
+                    case 'triangle': return dy >= -r && dy <= r && Math.abs(dx) <= r;
+                    case 'hexagon': return Math.sqrt(dx*dx + dy*dy) <= r*1.1;
+                    case 'scroll': return Math.abs(dx) <= r*1.2 && Math.abs(dy) <= r;
+                    default: return false;
+                }
+            }
+
+            saveState() {
+                this.history = this.history.slice(0, this.historyIndex + 1);
+                this.history.push(JSON.stringify({elements: this.elements, links: this.links}));
+                this.historyIndex++;
+                if (this.history.length > 50) {
+                    this.history.shift();
+                    this.historyIndex--;
+                }
+                document.getElementById('undoCount').textContent = this.history.length - 1;
+            }
+
+            undo() {
+                if (this.historyIndex > 0) {
+                    this.historyIndex--;
+                    const state = JSON.parse(this.history[this.historyIndex]);
+                    this.elements = state.elements;
+                    this.links = state.links;
+                    this.draw();
+                    this.updateStats();
+                    this.showToast('Annulé');
+                }
+            }
+
+            redo() {
+                if (this.historyIndex < this.history.length - 1) {
+                    this.historyIndex++;
+                    const state = JSON.parse(this.history[this.historyIndex]);
+                    this.elements = state.elements;
+                    this.links = state.links;
+                    this.draw();
+                    this.updateStats();
+                    this.showToast('Refait');
+                }
+            }
+
+            addElement() {
+                this.saveState();
+                const centerWorld = this.screenToWorld(this.canvas.width/2, this.canvas.height/2);
+                const elem = {
+                    id: Date.now(),
+                    x: centerWorld.x + (Math.random() - 0.5) * 100,
+                    y: centerWorld.y + (Math.random() - 0.5) * 100,
+                    radius: this.currentSize,
+                    shape: this.currentShape,
+                    color: this.currentColor,
+                    text: 'Élément',
+                    link: '',
+                    status: '',
+                    notes: '',
+                    visible: true,
+                    transparent: this.transparent,
+                    type: 'element'
+                };
+                this.elements.push(elem);
+                this.selected = elem;
+                this.draw();
+                this.updateStats();
+                this.showToast('Élément ajouté');
+            }
+
+            addIcon(icon) {
+                this.saveState();
+                const centerWorld = this.screenToWorld(this.canvas.width/2, this.canvas.height/2);
+                const elem = {
+                    id: Date.now(),
+                    x: centerWorld.x,
+                    y: centerWorld.y,
+                    radius: this.currentSize,
+                    shape: 'circle',
+                    color: this.currentColor,
+                    text: icon,
+                    isIcon: true,
+                    visible: true,
+                    transparent: this.transparent,
+                    type: 'element'
+                };
+                this.elements.push(elem);
+                this.selected = elem;
+                this.draw();
+                this.updateStats();
+            }
+
+            addTextLabel() {
+                this.saveState();
+                const centerWorld = this.screenToWorld(this.canvas.width/2, this.canvas.height/2);
+                const elem = {
+                    id: Date.now(),
+                    x: centerWorld.x,
+                    y: centerWorld.y,
+                    text: 'Texte',
+                    color: '#2d3748',
+                    fontSize: 18,
+                    visible: true,
+                    type: 'text'
+                };
+                this.elements.push(elem);
+                this.selected = elem;
+                this.draw();
+                this.updateStats();
+            }
+
+            toggleLinkMode() {
+                this.linkMode = !this.linkMode;
+                this.linkStart = null;
+                const btn = document.getElementById('linkBtn');
+                if (this.linkMode) {
+                    btn.classList.add('link-mode-active');
+                    this.canvas.style.cursor = 'crosshair';
+                    this.showToast('Mode liaison activé');
+                } else {
+                    btn.classList.remove('link-mode-active');
+                    this.canvas.style.cursor = 'grab';
+                }
+            }
+
+            setShape(shape) {
+                this.currentShape = shape;
+                document.querySelectorAll('.shape-card').forEach(c => c.classList.remove('active'));
+                document.querySelector(`[data-shape="${shape}"]`).classList.add('active');
+                if (this.selected && this.selected.type === 'element') {
+                    this.selected.shape = shape;
+                    this.draw();
+                }
+            }
+
+            setColor(color) {
+                this.currentColor = color;
+                if (this.selected) {
+                    this.selected.color = color;
+                    this.draw();
+                }
+            }
+
+            setLinkColor(color) {
+                this.currentLinkColor = color;
+            }
+
+            applyCustomColor() {
+                const color = document.getElementById('customColor').value;
+                if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+                    this.setColor(color);
+                    this.showToast('Couleur appliquée');
+                }
+            }
+
+            setSize(size) {
+                this.currentSize = parseInt(size);
+                if (this.selected && this.selected.type === 'element') {
+                    this.selected.radius = this.currentSize;
+                    this.draw();
+                }
+            }
+
+            toggleTransparent(checked) {
+                this.transparent = checked;
+                if (this.selected && this.selected.type === 'element') {
+                    this.selected.transparent = checked;
+                    this.draw();
+                }
+            }
+
+            toggleSnap(checked) {
+                this.snapToGrid = checked;
+                this.showToast(checked ? 'Grille activée' : 'Grille désactivée');
+            }
+
+            editSelected() {
+                if (!this.selected) {
+                    this.showToast('Sélectionnez un élément');
+                    return;
+                }
+                if (this.selected.type === 'text') {
+                    const text = prompt('Texte:', this.selected.text);
+                    if (text !== null) this.selected.text = text;
+                    this.draw();
+                    return;
+                }
+                document.getElementById('elemText').value = this.selected.text || '';
+                document.getElementById('elemLink').value = this.selected.link || '';
+                document.getElementById('elemStatus').value = this.selected.status || '';
+                document.getElementById('elemNotes').value = this.selected.notes || '';
+                document.getElementById('editModal').style.display = 'flex';
+            }
+
+            saveEdit() {
+                if (this.selected) {
+                    this.selected.text = document.getElementById('elemText').value;
+                    this.selected.link = document.getElementById('elemLink').value;
+                    this.selected.status = document.getElementById('elemStatus').value;
+                    this.selected.notes = document.getElementById('elemNotes').value;
+                    this.draw();
+                }
+                this.closeModal();
+            }
+
+            closeModal() {
+                document.getElementById('editModal').style.display = 'none';
+            }
+
+            showAll() {
+                this.elements.forEach(e => e.visible = true);
+                this.draw();
+                this.showToast('Tous les éléments affichés');
+            }
+
+            deleteSelected() {
+                if (!this.selected) return;
+                this.saveState();
+                const idx = this.elements.indexOf(this.selected);
+                if (idx > -1) {
+                    this.links = this.links.filter(l => l.from !== this.selected && l.to !== this.selected);
+                    this.elements.splice(idx, 1);
+                    this.selected = null;
+                    this.draw();
+                    this.updateStats();
+                    this.showToast('Élément supprimé');
+                }
+            }
+
+            duplicate() {
+                if (!this.selected) return;
+                this.saveState();
+                const dup = JSON.parse(JSON.stringify(this.selected));
+                dup.id = Date.now();
+                dup.x += 50;
+                dup.y += 50;
+                this.elements.push(dup);
+                this.selected = dup;
+                this.draw();
+                this.updateStats();
+                this.showToast('Élément dupliqué');
+            }
+
+            contextEdit() {
+                this.editSelected();
+                document.getElementById('contextMenu').style.display = 'none';
+            }
+
+            contextHide() {
+                if (this.contextElem) {
+                    this.contextElem.visible = false;
+                    this.draw();
+                }
+                document.getElementById('contextMenu').style.display = 'none';
+            }
+
+            contextDuplicate() {
+                this.duplicate();
+                document.getElementById('contextMenu').style.display = 'none';
+            }
+
+            contextDelete() {
+                this.deleteSelected();
+                document.getElementById('contextMenu').style.display = 'none';
+            }
+
+            autoArrange() {
+                if (this.elements.length === 0) return;
+                this.saveState();
+                const radius = 200;
+                const angleStep = (2 * Math.PI) / this.elements.length;
+                const centerWorld = this.screenToWorld(this.canvas.width/2, this.canvas.height/2);
+                this.elements.forEach((elem, i) => {
+                    elem.x = centerWorld.x + Math.cos(i * angleStep) * radius;
+                    elem.y = centerWorld.y + Math.sin(i * angleStep) * radius;
+                });
+                this.draw();
+                this.showToast('Éléments arrangés automatiquement');
+            }
+
+            zoomIn() {
+                this.zoom = Math.min(5, this.zoom * 1.2);
+                document.getElementById('zoomLevel').textContent = Math.round(this.zoom * 100) + '%';
+                this.draw();
+            }
+
+            zoomOut() {
+                this.zoom = Math.max(0.1, this.zoom / 1.2);
+                document.getElementById('zoomLevel').textContent = Math.round(this.zoom * 100) + '%';
+                this.draw();
+            }
+
+            resetView() {
+                this.zoom = 1;
+                this.panX = 0;
+                this.panY = 0;
+                document.getElementById('zoomLevel').textContent = '100%';
+                this.draw();
+            }
+
+            toggleShortcuts() {
+                const panel = document.getElementById('shortcutsPanel');
+                panel.classList.toggle('active');
+            }
+
+            loadTemplate(type) {
+                this.saveState();
+                this.elements = [];
+                this.links = [];
+                const centerWorld = this.screenToWorld(this.canvas.width/2, this.canvas.height/2);
+                
+                if (type === 'network') {
+                    const server = {id: 1, x: centerWorld.x, y: centerWorld.y - 100, radius: 40, shape: 'rectangle', color: '#667eea', text: '🖥️', isIcon: true, visible: true, type: 'element'};
+                    const db = {id: 2, x: centerWorld.x - 150, y: centerWorld.y + 100, radius: 40, shape: 'circle', color: '#43e97b', text: '🗄️', isIcon: true, visible: true, type: 'element'};
+                    const cloud = {id: 3, x: centerWorld.x + 150, y: centerWorld.y + 100, radius: 40, shape: 'circle', color: '#4facfe', text: '☁️', isIcon: true, visible: true, type: 'element'};
+                    this.elements = [server, db, cloud];
+                    this.links = [{from: server, to: db, color: '#2d3748', type: 'solid'}, {from: server, to: cloud, color: '#2d3748', type: 'solid'}];
+                } else if (type === 'workflow') {
+                    for (let i = 0; i < 4; i++) {
+                        this.elements.push({id: i+1, x: centerWorld.x - 200 + i*150, y: centerWorld.y, radius: 40, shape: 'rectangle', color: '#667eea', text: `Étape ${i+1}`, visible: true, type: 'element'});
+                    }
+                    for (let i = 0; i < 3; i++) {
+                        this.links.push({from: this.elements[i], to: this.elements[i+1], color: '#2d3748', type: 'solid'});
+                    }
+                } else if (type === 'mindmap') {
+                    const center = {id: 1, x: centerWorld.x, y: centerWorld.y, radius: 50, shape: 'circle', color: '#667eea', text: 'Idée Centrale', visible: true, type: 'element'};
+                    this.elements = [center];
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (i * 2 * Math.PI) / 5;
+                        const node = {id: i+2, x: centerWorld.x + Math.cos(angle)*150, y: centerWorld.y + Math.sin(angle)*150, radius: 35, shape: 'circle', color: '#f093fb', text: `Branche ${i+1}`, visible: true, type: 'element'};
+                        this.elements.push(node);
+                        this.links.push({from: center, to: node, color: '#2d3748', type: 'solid'});
+                    }
+                }
+                this.draw();
+                this.updateStats();
+                this.showToast(`Template ${type} chargé`);
+            }
+
+            clearAll() {
+                if (confirm('Tout effacer ?')) {
+                    this.saveState();
+                    this.elements = [];
+                    this.links = [];
+                    this.selected = null;
+                    this.draw();
+                    this.updateStats();
+                }
+            }
+
+            save() {
+                localStorage.setItem('diagrampro', JSON.stringify({elements: this.elements, links: this.links}));
+                this.showToast('Projet sauvegardé');
+            }
+
+            load() {
+                const data = localStorage.getItem('diagrampro');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    this.elements = parsed.elements || [];
+                    this.links = parsed.links || [];
+                    this.draw();
+                    this.updateStats();
+                    this.showToast('Projet chargé');
+                }
+            }
+
+            loadAuto() {
+                const data = localStorage.getItem('diagrampro');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    this.elements = parsed.elements || [];
+                    this.links = parsed.links || [];
+                    this.updateStats();
+                }
+            }
+
+            exportPNG() {
+                const link = document.createElement('a');
+                link.download = `diagram_${Date.now()}.png`;
+                link.href = this.canvas.toDataURL();
+                link.click();
+                this.showToast('Exporté en PNG');
+            }
+
+            exportSVG() {
+                let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${this.canvas.width}" height="${this.canvas.height}" style="background: white;">`;
+                this.links.forEach(l => {
+                    if (l.from.visible && l.to.visible) {
+                        const from = this.worldToScreen(l.from.x, l.from.y);
+                        const to = this.worldToScreen(l.to.x, l.to.y);
+                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${l.color}" stroke-width="3"/>`;
+                    }
+                });
+                this.elements.forEach(e => {
+                    if (e.visible) {
+                        const screen = this.worldToScreen(e.x, e.y);
+                        if (e.type === 'text') {
+                            svg += `<text x="${screen.x}" y="${screen.y}" text-anchor="middle" fill="${e.color}" font-size="${e.fontSize}" font-weight="700">${e.text}</text>`;
+                        } else if (e.shape === 'circle') {
+                            svg += `<circle cx="${screen.x}" cy="${screen.y}" r="${e.radius*this.zoom}" fill="${e.transparent ? 'none' : e.color}" stroke="${e.color}" stroke-width="2"/>`;
+                            if (!e.isIcon) svg += `<text x="${screen.x}" y="${screen.y}" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="14" font-weight="700">${e.text}</text>`;
+                        }
+                    }
+                });
+                svg += '</svg>';
+                const blob = new Blob([svg], {type: 'image/svg+xml'});
+                const link = document.createElement('a');
+                link.download = `diagram_${Date.now()}.svg`;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                this.showToast('Exporté en SVG');
+            }
+
+            updateStats() {
+                document.getElementById('elemCount').textContent = this.elements.length;
+                document.getElementById('linkCount').textContent = this.links.length;
+            }
+
+            showToast(msg) {
+                const toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.classList.add('active');
+                setTimeout(() => toast.classList.remove('active'), 2000);
+            }
+
+            draw() {
+                this.ctx.save();
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Grid
+                if (this.snapToGrid) {
+                    this.ctx.strokeStyle = '#e2e8f0';
+                    this.ctx.lineWidth = 1;
+                    const gridSize = 20 * this.zoom;
+                    const offsetX = this.panX % gridSize;
+                    const offsetY = this.panY % gridSize;
+                    for (let x = offsetX; x < this.canvas.width; x += gridSize) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(x, 0);
+                        this.ctx.lineTo(x, this.canvas.height);
+                        this.ctx.stroke();
+                    }
+                    for (let y = offsetY; y < this.canvas.height; y += gridSize) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(0, y);
+                        this.ctx.lineTo(this.canvas.width, y);
+                        this.ctx.stroke();
+                    }
+                }
+
+                this.ctx.translate(this.panX, this.panY);
+                this.ctx.scale(this.zoom, this.zoom);
+
+                // Links
+                this.links.forEach(l => {
+                    if (l.from.visible && l.to.visible) {
+                        this.ctx.strokeStyle = l.color;
+                        this.ctx.lineWidth = 3 / this.zoom;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(l.from.x, l.from.y);
+                        this.ctx.lineTo(l.to.x, l.to.y);
+                        this.ctx.stroke();
+                        
+                        const angle = Math.atan2(l.to.y - l.from.y, l.to.x - l.from.x);
+                        const arrowSize = 12 / this.zoom;
+                        const dx = l.to.x - l.from.x;
+                        const dy = l.to.y - l.from.y;
+                        const len = Math.sqrt(dx*dx + dy*dy);
+                        const ratio = (len - l.to.radius) / len;
+                        const endX = l.from.x + dx * ratio;
+                        const endY = l.from.y + dy * ratio;
+                        
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(endX, endY);
+                        this.ctx.lineTo(endX - arrowSize * Math.cos(angle - Math.PI/6), endY - arrowSize * Math.sin(angle - Math.PI/6));
+                        this.ctx.moveTo(endX, endY);
+                        this.ctx.lineTo(endX - arrowSize * Math.cos(angle + Math.PI/6), endY - arrowSize * Math.sin(angle + Math.PI/6));
+                        this.ctx.stroke();
+                    }
+                });
+
+                // Elements
+                this.elements.forEach(e => {
+                    if (!e.visible) return;
+                    
+                    const isSelected = e === this.selected;
+                    
+                    if (e.type === 'text') {
+                        this.ctx.fillStyle = e.color;
+                        this.ctx.font = `700 ${e.fontSize / this.zoom}px Poppins`;
+                        this.ctx.textAlign = 'center';
+                        this.ctx.textBaseline = 'middle';
+                        if (isSelected) {
+                            this.ctx.shadowColor = '#667eea';
+                            this.ctx.shadowBlur = 15 / this.zoom;
+                        }
+                        this.ctx.fillText(e.text, e.x, e.y);
+                        this.ctx.shadowBlur = 0;
+                        return;
+                    }
+
+                    if (isSelected) {
+                        this.ctx.shadowColor = '#667eea';
+                        this.ctx.shadowBlur = 20 / this.zoom;
+                    } else {
+                        this.ctx.shadowBlur = 0;
+                    }
+
+                    this.ctx.fillStyle = e.transparent ? 'transparent' : e.color;
+                    this.ctx.strokeStyle = isSelected ? '#667eea' : e.color;
+                    this.ctx.lineWidth = (e.transparent ? 4 : isSelected ? 4 : 2) / this.zoom;
+
+                    this.ctx.beginPath();
+                    const r = e.radius;
+                    switch(e.shape) {
+                        case 'circle':
+                            this.ctx.arc(e.x, e.y, r, 0, Math.PI * 2);
+                            break;
+                        case 'rectangle':
+                            this.ctx.rect(e.x - r, e.y - r, r*2, r*2);
+                            break;
+                        case 'diamond':
+                            this.ctx.moveTo(e.x, e.y - r*1.2);
+                            this.ctx.lineTo(e.x + r*1.2, e.y);
+                            this.ctx.lineTo(e.x, e.y + r*1.2);
+                            this.ctx.lineTo(e.x - r*1.2, e.y);
+                            this.ctx.closePath();
+                            break;
+                        case 'triangle':
+                            this.ctx.moveTo(e.x, e.y - r);
+                            this.ctx.lineTo(e.x + r, e.y + r);
+                            this.ctx.lineTo(e.x - r, e.y + r);
+                            this.ctx.closePath();
+                            break;
+                        case 'hexagon':
+                            for (let i = 0; i < 6; i++) {
+                                const a = (Math.PI / 3) * i;
+                                const px = e.x + r * Math.cos(a);
+                                const py = e.y + r * Math.sin(a);
+                                if (i === 0) this.ctx.moveTo(px, py);
+                                else this.ctx.lineTo(px, py);
+                            }
+                            this.ctx.closePath();
+                            break;
+                        case 'scroll':
+                            const w = r * 1.2;
+                            this.ctx.moveTo(e.x - w, e.y - r);
+                            this.ctx.bezierCurveTo(e.x - w + 10, e.y - r - 5, e.x - w + 10, e.y - r + 5, e.x - w, e.y - r + 10);
+                            this.ctx.lineTo(e.x - w, e.y + r - 10);
+                            this.ctx.bezierCurveTo(e.x - w + 10, e.y + r - 5, e.x - w + 10, e.y + r + 5, e.x - w, e.y + r);
+                            this.ctx.lineTo(e.x + w, e.y + r);
+                            this.ctx.bezierCurveTo(e.x + w - 10, e.y + r + 5, e.x + w - 10, e.y + r - 5, e.x + w, e.y + r - 10);
+                            this.ctx.lineTo(e.x + w, e.y - r + 10);
+                            this.ctx.bezierCurveTo(e.x + w - 10, e.y - r + 5, e.x + w - 10, e.y - r - 5, e.x + w, e.y - r);
+                            this.ctx.closePath();
+                            break;
+                    }
+                    this.ctx.fill();
+                    this.ctx.stroke();
+                    this.ctx.shadowBlur = 0;
+
+                    // Text
+                    if (e.isIcon) {
+                        this.ctx.font = `${r / this.zoom}px Poppins`;
+                        this.ctx.textAlign = 'center';
+                        this.ctx.textBaseline = 'middle';
+                        this.ctx.fillText(e.text, e.x, e.y);
+                    } else {
+                        this.ctx.fillStyle = e.transparent ? e.color : '#ffffff';
+                        this.ctx.font = `700 ${14 / this.zoom}px Poppins`;
+                        this.ctx.textAlign = 'center';
+                        this.ctx.textBaseline = 'middle';
+                        this.ctx.fillText(e.text, e.x, e.y);
+                    }
+
+                    if (e.status) {
+                        this.ctx.fillStyle = e.transparent ? e.color : '#ffffff';
+                        this.ctx.font = `700 ${13 / this.zoom}px Poppins`;
+                        this.ctx.fillText(e.status, e.x + r - 12, e.y - r + 12);
+                    }
+                });
+
+                this.ctx.restore();
+
+                // Minimap
+                this.drawMinimap();
+            }
+
+            drawMinimap() {
+                this.minimapCtx.clearRect(0, 0, 200, 150);
+                this.minimapCtx.fillStyle = '#f7fafc';
+                this.minimapCtx.fillRect(0, 0, 200, 150);
+                
+                if (this.elements.length === 0) return;
+                
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                this.elements.forEach(e => {
+                    minX = Math.min(minX, e.x);
+                    minY = Math.min(minY, e.y);
+                    maxX = Math.max(maxX, e.x);
+                    maxY = Math.max(maxY, e.y);
+                });
+                
+                const w = maxX - minX + 200;
+                const h = maxY - minY + 200;
+                const scale = Math.min(200 / w, 150 / h);
+                const offsetX = (200 - w * scale) / 2 - minX * scale;
+                const offsetY = (150 - h * scale) / 2 - minY * scale;
+                
+                this.minimapCtx.strokeStyle = '#cbd5e0';
+                this.minimapCtx.lineWidth = 1;
+                this.links.forEach(l => {
+                    if (l.from.visible && l.to.visible) {
+                        this.minimapCtx.beginPath();
+                        this.minimapCtx.moveTo(l.from.x * scale + offsetX, l.from.y * scale + offsetY);
+                        this.minimapCtx.lineTo(l.to.x * scale + offsetX, l.to.y * scale + offsetY);
+                        this.minimapCtx.stroke();
+                    }
+                });
+                
+                this.elements.forEach(e => {
+                    if (e.visible) {
+                        this.minimapCtx.fillStyle = e.color;
+                        this.minimapCtx.beginPath();
+                        this.minimapCtx.arc(e.x * scale + offsetX, e.y * scale + offsetY, 3, 0, Math.PI * 2);
+                        this.minimapCtx.fill();
+                    }
+                });
+            }
+        }
+
+        const app = new DiagramApp();
+    </script>
+</body>
+</html>
