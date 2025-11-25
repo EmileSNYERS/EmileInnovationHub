@@ -62,7 +62,6 @@ Merci de votre visite et bonne exploration ! 🚀✨
 
 ---
 
-J'espère que cette version correspond mieux à vos attentes ! 😊
 
 <!DOCTYPE html>
 
